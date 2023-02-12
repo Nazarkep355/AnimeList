@@ -23,6 +23,6 @@ public class Anime {
     private int episodesNumber;
     @ManyToMany
     private List<Genre> genres;
-    @ManyToMany
+    @OneToMany(mappedBy = "anime")
     private List<Character> characters;
 }

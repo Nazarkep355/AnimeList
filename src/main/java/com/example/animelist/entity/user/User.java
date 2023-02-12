@@ -1,5 +1,6 @@
 package com.example.animelist.entity.user;
 
+import com.example.animelist.entity.Anime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -27,7 +30,10 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private Role role;
-
+    @ManyToMany
+    private List<Anime> watchedList;
+    @ElementCollection
+    private Map<Anime,Integer> rates;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
