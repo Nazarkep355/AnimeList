@@ -29,6 +29,7 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
     private Role role;
     @ManyToMany
     private List<Anime> watchedList;
