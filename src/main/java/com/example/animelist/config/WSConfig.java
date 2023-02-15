@@ -41,16 +41,9 @@ public class WSConfig {
                 .permitAll()
                 .and()
                 .formLogin()
-//                .loginPage("/anime")
                 .successForwardUrl("/log")
                 .and()
                 .logout()
-//                .logoutSuccessHandler((request, response, authentication) -> {
-//                    SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(request.getUserPrincipal(),null));
-//                    SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-//                            response.setStatus(HttpServletResponse.SC_OK);
-//                        }
-//                )
                 .logoutSuccessUrl("/anime")
                 ;
 
