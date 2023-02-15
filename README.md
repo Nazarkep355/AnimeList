@@ -1,5 +1,3 @@
 # AnimeList
 TODO
-SECURITY_CONFIG \n
-
-PAGE_WITH_VIDEO_STREAMIBG
+Show upload progress
