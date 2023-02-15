@@ -25,5 +25,10 @@
         logout
     </button>
 </form>
+
+<form enctype="multipart/form-data" method="post" th:action="@{/upload}">
+    <input type="file" name="file">
+    <button type="submit"> upload</button>
+</form>
 </body>
 </html>

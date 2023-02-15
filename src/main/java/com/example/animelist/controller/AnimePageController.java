@@ -1,6 +1,7 @@
 package com.example.animelist.controller;
 
 import com.example.animelist.repos.UserRepository;
+import com.example.animelist.service.UploadFileService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,18 +18,25 @@ import java.util.Enumeration;
 public class AnimePageController {
 
 
+
+    @Autowired
+    private UploadFileService fileService;
+
     @GetMapping("/")
-        public String redirectTo(){
-                return "anime_page.html";
-        }
+    public String redirectTo() {
+        return "anime_page.html";
+    }
 
-
-    @PostMapping("/log")
-    public String login(){
+    @PostMapping("/upload")
+    public String upload(MultipartFile file){
+        fileService.saveFile(file);
         return "redirect:/";
     }
 
-
+    @PostMapping("/log")
+    public String login() {
+        return "redirect:/";
+    }
 
 
 }
