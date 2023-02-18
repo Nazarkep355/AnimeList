@@ -25,4 +25,7 @@ public class Anime {
     private List<Genre> genres;
     @OneToMany(mappedBy = "anime")
     private List<Character> characters;
+    private String poster;
+    @ElementCollection
+    private List<String> images;
 }

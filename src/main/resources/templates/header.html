@@ -29,17 +29,50 @@
                 <li><a href="#" class="nav-link px-2 text-white">About</a></li>
             </ul>
 
-           <div ng-app="search"> <form ng-controller="searchcontroller" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" ng-model="ex"  class="form-control form-control-dark text-bg-dark" placeholder="Search..."
-                       aria-label="Search">
-               <div>{{ex}}</div>
-               <script>
-                   searchapp = angular.module('search',[])
-                   searchapp.controller("searchcontroller", function ($scope, $http){
+            <div ng-app="search">
+                <form ng-controller="searchcontroller" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                    <input type="search" ng-model="searchName" ng-change="search()"
+                           class="form-control form-control-dark text-bg-dark" placeholder="Search..."
+                           aria-label="Search">
+                    <div class="container" style="margin-left: 5px;position:absolute;max-width:350px;
+                            max-height: 600px;background: white;">
+                        <div class="row" style="min-height: 200px; max-height:200px; min-width: 350px;  color:black"
+                             ng-repeat="anime in animes">
+                            <div class="col">
+                                <img height="180px" src="/images/{{anime.poster}}">
+                            </div>
+                            <div class="col">
+                                {{anime.title}}
+                            </div>
 
-                   })
-               </script>
-            </form></div>
+                        </div>
+                    </div>
+                    <script>
+                        searchapp = angular.module('search', [])
+
+                        searchapp.controller("searchcontroller", function ($scope, $http) {
+
+
+                            $scope.search = function () {
+                                // console.log($scope.searchName)
+                                // if ($scope.searchName != null&&$scope.searchName.length>2) {
+                                    $http.get("/anime/" + $scope.searchName)
+                                        .then
+                                        (function (response) {
+                                            $scope.animes = response.data.content;
+
+                                        }, function (error) {
+                                            alert(error.message)
+                                        });
+                                // }
+                                console.log($scope.animes)
+                            }
+
+
+                        })
+                    </script>
+                </form>
+            </div>
 
             <div class="text-end">
                 <button type="button" class="btn btn-outline-light me-2">Login</button>
