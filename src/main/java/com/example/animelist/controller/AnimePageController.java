@@ -17,7 +17,7 @@ import java.util.Enumeration;
 public class AnimePageController {
 
 
-    @GetMapping("/home")
+    @GetMapping("/")
         public String redirectTo(){
                 return "anime_page.html";
         }

@@ -44,7 +44,7 @@ public class WSConfig {
                 .successForwardUrl("/log")
                 .and()
                 .logout()
-                .logoutSuccessUrl("/anime")
+                .logoutSuccessUrl("/")
                 ;
 
 

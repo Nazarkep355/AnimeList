@@ -15,8 +15,9 @@ public class RestAnimeController {
     private AnimeSearchService animeSearchService;
 
 
-    @GetMapping("/anime/{name}")
+    @GetMapping("/search/{name}")
     public Page<Anime> getAnimeByName(@PathVariable("name") String name, Pageable pageable) {
+//        System.out.println("name:"+name);
         return animeSearchService.findAnimeByName(name, pageable);
     }
 
