@@ -11,5 +11,6 @@ public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String name;
+    private String enName;
+    private String ukName;
 }

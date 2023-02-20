@@ -29,7 +29,12 @@ public class UserRateService {
     public List<Anime> topRating(int quantity) {
         List<Long> ids = userRepository.topRating(quantity);
         return ids.stream()
-                .map(a -> animeRepository.getById(a))
+                .map(a -> animeRepository.findById(a).get())
                 .collect(Collectors.toList());
+    }
+    public double getAnimeRate(long id) {
+        double rate = userRepository.avarageRate(id);
+        BigDecimal decimal = new BigDecimal(rate).setScale(2, RoundingMode.HALF_UP);
+        return decimal.doubleValue();
     }
 }

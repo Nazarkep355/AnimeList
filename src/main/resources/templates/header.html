@@ -34,7 +34,7 @@
                            aria-label="Search">
                     <div class="container" style="margin-left: 5px;position:absolute;max-width:350px;
                             max-height: 600px;background: white;border: black 1px">
-                        <div class="row" style="min-height: 200px; max-height:200px; min-width: 350px;
+                        <div class="row" style="min-height: 160px; max-height:160px; min-width: 350px;
                           color:black"
                              ng-repeat="anime in animes"
                         >
@@ -54,7 +54,6 @@
 
 
                             $scope.search = function () {
-                                console.log($scope.searchName.length)
                                 if ($scope.searchName.length>2) {
                                     $http.get("/search/" + $scope.searchName+"?size=3")
                                         .then
@@ -68,7 +67,6 @@
                                 else {
                                     $scope.animes=[]
                                 }
-                                console.log($scope.animes)
                             }
 
 
