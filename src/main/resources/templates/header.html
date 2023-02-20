@@ -30,7 +30,7 @@
             <div ng-app="search">
                 <form ng-controller="searchcontroller" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
                     <input type="search" ng-model="searchName" ng-change="search()"
-                           class="form-control form-control-dark text-bg-dark" placeholder="Search..."
+                           class="form-control form-control-dark text-bg-dark" th:placeholder="#{title.search.}"
                            aria-label="Search">
                     <div class="container" style="margin-left: 5px;position:absolute;max-width:350px;
                             max-height: 600px;background: white;border: black 1px">
