@@ -1,10 +1,12 @@
 package com.example.animelist.entity;
 
+import com.example.animelist.service.UserRateService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Anime {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -29,4 +32,5 @@ public class Anime {
     private String poster;
     @ElementCollection
     private List<String> images;
+
 }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body>
+<div th:insert="header.html:: header"></div>
+<div style="background: black">
+    <div class="container">
+        <div class="container mx-1">
+            <div style="background: white;">
+                <div class="row">
+                    <div class="col" style="min-width: 70%;">
+                        <div class="container mx-1">
+                            <div style="background: deepskyblue;min-height: 1000px"></div>
+                        </div>
+                    </div>
+                    <div class="col" style="min-width: 28%;">
+                        <div class="container mx-1">
+                            <div style="background: red;min-height: 1000px">
+                                <div id="topRating" ng-app="topRatingAnime">
+                                    <div ng-controller="topCtrl">
+                                       <div style="background: #dde1ec;" class="container"> <strong
+                                               style="color: #000;text-align: left;
+                            font-family: Avenir,lucida grande,tahoma,verdana,arial,sans-serif;">
+                                            Top Rating
+                                        </strong> <a href="/best100" style=" float: right;text-align: right;margin-left: 60px;color: darkblue;text-decoration:none">Top 100</a></div>
+
+
+                                    </div>
+                                    <script>
+                                        topRating = angular.module('topRatingAnime',[])
+                                        topRating.controller("topCtrl",function ($scope, $http) {
+
+
+                                        })
+                                           angular.bootstrap(document.getElementById('topRating'),['topRatingAnime'])
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
