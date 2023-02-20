@@ -21,6 +21,7 @@ public class Anime {
     private String title;
     private String description;
     private int episodesNumber;
+
     @ManyToMany
     private List<Genre> genres;
     @OneToMany(mappedBy = "anime")
