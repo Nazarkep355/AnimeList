@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Double avarageRate(Long animeId);
 
     @Query(value = "select rates_key " +
-            "from user_rates group by user_rates.rates_key order by avg(rates) desc limit ?1",nativeQuery = true)
+            "from user_rates group by user_rates.rates_key having avg(rates)>0 or count(rates_key)=0 order by avg(rates) desc limit ?1",nativeQuery = true)
     List<Long> topRating(int number);
 
 }

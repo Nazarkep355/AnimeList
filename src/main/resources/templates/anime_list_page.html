@@ -22,13 +22,14 @@
                             <div style="min-height: 1000px">
                                 <div id="topRating" ng-app="topRatingAnime">
                                     <div ng-controller="topCtrl">
-                                        <div style="background: #dde1ec;" class="container"><strong
+                                        <div style="background: #dde1ec" class="container"><strong
                                                 style="color: #000;text-align: left;
                                         font-family: Avenir,lucida grande,tahoma,verdana,arial,sans-serif;">
                                             Top Rating
-                                        </strong> <a href="/best100" style=" float: right;text-align: right;
+                                        </strong>
+                                            <a href="/best100" style=" float: right;text-align: right;
                                         margin-left: 60px;color: darkblue;text-decoration:none;">Top 100</a></div>
-                                        <div style="max-height: 600px">
+                                        <div style="max-height: 615px;background: #f5e1e1;">
                                             <div ng-repeat="anime in bestAnimes">
                                                 <div style="max-height: 120px;min-height: 120px"
                                                      class="row container my-1">
@@ -39,11 +40,15 @@
                                                         </a></div>
                                                     <div class="col" style="margin-left: 0px">
                                                         <div><a href="/anime/{{anime.title}}"
-                                                                style="color: darkblue;text-decoration:none;font-size: 13px">{{anime.title}}</a>
+                                                                style="color: darkblue;text-decoration:none;font-size: 13px;
+                                                                min-width: 200px">{{anime.title}}</a>
                                                         </div>
-                                                        <div>
-                                                            genre:Action, rate:{{anime.rate | number:2}}
-                                                        </div>
+                                                        <small class="text-muted" style="font-size: 10px">
+                                                            <span th:if="${!#locale.getLanguage().equals('uk')}"
+                                                            >genre: {{anime.genres[0].enName}}, rated {{anime.rate | number:2}}</span>
+                                                            <span th:if="${#locale.getLanguage().equals('uk')}"
+                                                            >жанр: {{anime.genres[0].ukName}}, оцінено {{anime.rate | number:2}}</span>
+                                                        </small>
 
                                                     </div>
                                                 </div>
@@ -59,6 +64,7 @@
                                                 $http.get('/best?quantity=5').then(function (response) {
                                                     $scope.bestAnimes = response.data;
                                                     $scope.getRates()
+                                                    console.log($scope.bestAnimes)
                                                 }, function (error) {
                                                     alert(error.message)
                                                 })
@@ -67,7 +73,6 @@
 
                                             $scope.getRate= function (anime) {
                                                 $http.get('/rating/'+anime.id).then(function (response) {
-                                                    console.log(response.data)
                                                    anime.rate= response.data;
                                                 }, function (error) {
                                                     alert(error.message)
