@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        .swiper {
+            width: 600px;
+            height: 300px;
+        }
+    </style>
+
 </head>
 <body>
 <div th:insert="header.html:: header"></div>
@@ -13,8 +20,50 @@
             <div style="background: white;">
                 <div class="row">
                     <div class="col" style="min-width: 70%;">
-                        <div class="container mx-1">
-                            <div style="background: deepskyblue;min-height: 1000px"></div>
+                        <div class="container mx-1 my-3">
+                            <!--                            <div style="background: deepskyblue;min-height: 1000px"></div>-->
+                            <div class="container mx-2 my-3">
+                                <div class="swiper">
+                                    <!-- Additional required wrapper -->
+                                    <div class="swiper-wrapper">
+                                        <div th:each="anime : ${firstPageList}" class="swiper-slide">
+                                         <div style=";margin-left: 40px"><a th:href="'/anime/'+${anime.title}"
+                                                    style="color: darkblue;text-decoration:none;font-size: 13px;
+                                                                min-width: 200px"><img height="250px"  th:src="'/images/'+${anime.poster}">
+                                                <div th:text="${anime.title}"></div></a></div>
+                                        </div>
+
+                                    </div>
+                                    <div class="swiper-button-prev"></div>
+                                    <div class="swiper-button-next"></div>
+                                </div>
+                                <script> const swiper = new Swiper('.swiper', {
+                                    // Optional parameters
+                                    direction: 'horizontal',
+                                    loop: true,
+                                    coverflowEffect: {
+                                        rotate: 0
+                                    },
+                                    slidesPerView: 3,
+                                    spaceBetween: 10,
+                                    initialSlide: 0,
+                                    // If we need pagination
+                                    pagination: {
+                                        el: '.swiper-pagination',
+                                    },
+
+                                    // Navigation arrows
+                                    navigation: {
+                                        nextEl: '.swiper-button-next',
+                                        prevEl: '.swiper-button-prev',
+                                    },
+
+                                    // And if we need scrollbar
+                                    //  scrollbar: {
+                                    //  el: '.swiper-scrollbar',
+                                    // },
+                                });</script>
+                            </div>
                         </div>
                     </div>
                     <div class="col" style="min-width: 28%;">
@@ -59,7 +108,7 @@
                                         topRating = angular.module('topRatingAnime', [])
                                         topRating.controller("topCtrl", function ($scope, $http) {
                                             $scope.bestAnimes = []
-                                            $scope.rates=[]
+                                            $scope.rates = []
                                             $scope.setTop = function () {
                                                 $http.get('/best?quantity=5').then(function (response) {
                                                     $scope.bestAnimes = response.data;
@@ -71,15 +120,15 @@
                                             }
 
 
-                                            $scope.getRate= function (anime) {
-                                                $http.get('/rating/'+anime.id).then(function (response) {
-                                                   anime.rate= response.data;
+                                            $scope.getRate = function (anime) {
+                                                $http.get('/rating/' + anime.id).then(function (response) {
+                                                    anime.rate = response.data;
                                                 }, function (error) {
                                                     alert(error.message)
                                                 })
                                             }
-                                            $scope.getRates=function (){
-                                                for(i=0;i<$scope.bestAnimes.length;i++){
+                                            $scope.getRates = function () {
+                                                for (i = 0; i < $scope.bestAnimes.length; i++) {
                                                     $scope.getRate($scope.bestAnimes[i])
                                                 }
                                             }
