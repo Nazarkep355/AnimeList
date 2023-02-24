@@ -1,10 +1,12 @@
 package com.example.animelist.controller;
 
 import com.example.animelist.entity.Anime;
+import com.example.animelist.entity.Record;
 import com.example.animelist.entity.SavedList;
 import com.example.animelist.repos.AnimeRepository;
 import com.example.animelist.repos.UserRepository;
 import com.example.animelist.service.AnimeSearchService;
+import com.example.animelist.service.RecordService;
 import com.example.animelist.service.UserRateService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,16 @@ public class MainPageController {
     String firstListName = "firstPageList";
     @Autowired
     private AnimeSearchService animeSearchService;
-
+    @Autowired
+    private RecordService recordService;
 
     @GetMapping("/")
     public String redirectTo(Model model) {
         SavedList savedList= animeSearchService.findSavedListByName(firstListName).get();
         List<Anime> animeList = savedList.getAnimeList();
         model.addAttribute(firstListName,animeList);
+        List<Record> lastUpdates = recordService.getLastUpdates().getContent();
+        model.addAttribute("updates",lastUpdates);
         return "anime_list_page.html";
     }
 

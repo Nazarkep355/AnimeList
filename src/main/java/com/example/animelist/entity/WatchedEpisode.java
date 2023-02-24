@@ -21,6 +21,5 @@ public class WatchedEpisode {
     private Episode episode;
     @ManyToOne
     private User user;
-    private int episodeNumber;
     private int pauseTime;
 }

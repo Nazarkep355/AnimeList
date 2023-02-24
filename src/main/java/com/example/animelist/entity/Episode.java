@@ -19,5 +19,7 @@ public class Episode {
     @ManyToOne
     @JoinColumn
     private Anime anime;
+    @Column
+    private int episodeNum;
     private String fileName;
 }
