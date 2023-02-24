@@ -21,6 +21,7 @@ public class MainPageController {
     @Autowired
     private AnimeSearchService animeSearchService;
 
+
     @GetMapping("/")
     public String redirectTo(Model model) {
         SavedList savedList= animeSearchService.findSavedListByName(firstListName).get();
