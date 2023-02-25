@@ -21,6 +21,7 @@ public class Anime {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     private String title;
     private String description;
     private int episodesNumber;
