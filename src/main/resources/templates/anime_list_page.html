@@ -33,6 +33,7 @@
 
 </head>
 <body>
+
 <div th:insert="header.html:: header"></div>
 <div style="background: black">
     <div class="container">
@@ -96,24 +97,24 @@
                                     <tbody>
                                     <tr style="width: 700px" class="container my-1" th:each="record : ${updates}">
 
-                                            <td style="width: 20%;">
-                                                <a style="text-decoration: none; color: black"
-                                                   th:href="'/anime/'+${record.episode.anime.title}">
+                                        <td style="width: 20%;">
+                                            <a style="text-decoration: none; color: black"
+                                               th:href="'/anime/'+${record.episode.anime.title}">
                                                 <img height="80px"
                                                      th:src="'/images/'+${record.episode.anime.poster}"></a></td>
 
-                                            <td style="width: 50%" >
-                                                <a style="text-decoration: none;color: black "
-                                                   th:href="'/anime/'+${record.episode.anime.title}"
-                                                   th:text="${record.episode.anime.title}">
-                                                </a>
-                                            </td>
-                                            <td style="width: 30%" >
-                                                <a style="text-decoration: none;color:black;"
-                                                   th:href="'/anime/'+${record.episode.anime.title}"
-                                                   th:text="${record.episode.episodeNum}+' '+#{title.episode}">
-                                                </a>
-                                         </td>
+                                        <td style="width: 50%">
+                                            <a style="text-decoration: none;color: black "
+                                               th:href="'/anime/'+${record.episode.anime.title}"
+                                               th:text="${record.episode.anime.title}">
+                                            </a>
+                                        </td>
+                                        <td style="width: 30%">
+                                            <a style="text-decoration: none;color:black;"
+                                               th:href="'/anime/'+${record.episode.anime.title}"
+                                               th:text="${record.episode.episodeNum}+' '+#{title.episode}">
+                                            </a>
+                                        </td>
 
                                     </tr>
                                     </tbody>
@@ -123,81 +124,89 @@
                         </div>
                         <div style="min-height: 150px"></div>
                     </div>
+                    <div id="videoPlayerElement" style="position: absolute;top:0;left:0;z-index:1;opacity: 0.6;
+                        background: gray;height: 880px;width: 1550px">
+                    <div style="left: 40%;top:20%;background: #fff">
+                        <video
+                    </div>
 
-                <div class="col" style="min-width: 28%;">
-                    <div class="container mx-1">
-                        <div >
-                            <div id="topRating" ng-app="topRatingAnime">
-                                <div ng-controller="topCtrl">
-                                    <div style="background: #dde1ec" class="container"><strong
-                                            style="color: #000;text-align: left;
-                                        font-family: Avenir,lucida grande,tahoma,verdana,arial,sans-serif;">
-                                        Top Rating
-                                    </strong>
-                                        <a href="/best100" style=" float: right;text-align: right;
-                                        margin-left: 60px;color: darkblue;text-decoration:none;">Top 100</a></div>
-                                    <div style="max-height: 615px;background: #f5e1e1;">
-                                        <div ng-repeat="anime in bestAnimes">
-                                            <div style="max-height: 120px;min-height: 120px"
-                                                 class="row container my-1">
-                                                <div class="col" style="max-width: 82px">
-                                                    <a href="/anime/{{anime.title}}"> <img height="110px"
-                                                                                           width="75px"
-                                                                                           src="/images/{{anime.poster}}"/>
-                                                    </a></div>
-                                                <div class="col" style="margin-left: 0px">
-                                                    <div><a href="/anime/{{anime.title}}"
-                                                            style="color: darkblue;text-decoration:none;font-size: 13px;
+                    </div>
+                    <div class="col" style="min-width: 28%;">
+                        <div class="container mx-1">
+                            <div>
+                                <div id="topRating" ng-app="topRatingAnime">
+                                    <div ng-controller="topCtrl">
+                                        <div style="background: #dde1ec" class="container"><strong
+                                                style="color: #000;text-align: left;
+                                        font-family: Avenir,lucida grande,tahoma,verdana,arial,sans-serif;"
+                                                th:text="#{title.topRating}">
+                                        </strong>
+                                            <a href="/best100" style=" float: right;text-align: right;
+                                        margin-left: 60px;color: darkblue;text-decoration:none;"
+                                               th:text="#{title.top100}"></a></div>
+                                        <div style="max-height: 615px;background: #f5e1e1;">
+                                            <div ng-repeat="anime in bestAnimes">
+                                                <div style="max-height: 120px;min-height: 120px"
+                                                     class="row container my-1">
+                                                    <div class="col" style="max-width: 82px">
+                                                        <a href="/anime/{{anime.title}}"> <img height="110px"
+                                                                                               width="75px"
+                                                                                               src="/images/{{anime.poster}}"/>
+                                                        </a></div>
+                                                    <div class="col" style="margin-left: 0px">
+                                                        <div><a href="/anime/{{anime.title}}"
+                                                                style="color: darkblue;text-decoration:none;font-size: 13px;
                                                                 min-width: 200px">{{anime.title}}</a>
-                                                    </div>
-                                                    <small class="text-muted" style="font-size: 10px">
+                                                        </div>
+                                                        <small class="text-muted" style="font-size: 10px">
                                                             <span th:if="${!#locale.getLanguage().equals('uk')}"
                                                             >genre: {{anime.genres[0].enName}}, rated {{anime.rate | number:2}}</span>
-                                                        <span th:if="${#locale.getLanguage().equals('uk')}"
-                                                        >жанр: {{anime.genres[0].ukName}}, оцінено {{anime.rate | number:2}}</span>
-                                                    </small>
+                                                            <span th:if="${#locale.getLanguage().equals('uk')}"
+                                                            >жанр: {{anime.genres[0].ukName}}, оцінено {{anime.rate | number:2}}</span>
+                                                        </small>
 
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <script>
-                                    topRating = angular.module('topRatingAnime', [])
-                                    topRating.controller("topCtrl", function ($scope, $http) {
-                                        $scope.bestAnimes = []
-                                        $scope.rates = []
-                                        $scope.setTop = function () {
-                                            $http.get('/best?quantity=5').then(function (response) {
-                                                $scope.bestAnimes = response.data;
-                                                $scope.getRates()
-                                                console.log($scope.bestAnimes)
-                                            }, function (error) {
-                                                alert(error.message)
-                                            })
-                                        }
-
-
-                                        $scope.getRate = function (anime) {
-                                            $http.get('/rating/' + anime.id).then(function (response) {
-                                                anime.rate = response.data;
-                                            }, function (error) {
-                                                alert(error.message)
-                                            })
-                                        }
-                                        $scope.getRates = function () {
-                                            for (i = 0; i < $scope.bestAnimes.length; i++) {
-                                                $scope.getRate($scope.bestAnimes[i])
+                                    <script>
+                                        topRating = angular.module('topRatingAnime', [])
+                                        topRating.controller("topCtrl", function ($scope, $http) {
+                                            $scope.bestAnimes = []
+                                            $scope.rates = []
+                                            $scope.setTop = function () {
+                                                $http.get('/best?quantity=5').then(function (response) {
+                                                    $scope.bestAnimes = response.data;
+                                                    $scope.getRates()
+                                                    console.log($scope.bestAnimes)
+                                                }, function (error) {
+                                                    alert(error.message)
+                                                })
                                             }
-                                        }
-                                        $scope.setTop();
 
 
-                                    })
+                                            $scope.getRate = function (anime) {
+                                                $http.get('/rating/' + anime.id).then(function (response) {
+                                                    anime.rate = response.data;
+                                                }, function (error) {
+                                                    alert(error.message)
+                                                })
+                                            }
+                                            $scope.getRates = function () {
+                                                for (i = 0; i < $scope.bestAnimes.length; i++) {
+                                                    $scope.getRate($scope.bestAnimes[i])
+                                                }
+                                            }
+                                            $scope.setTop();
 
-                                    angular.bootstrap(document.getElementById('topRating'), ['topRatingAnime'])
 
-                                </script>
+                                        })
+
+                                        angular.bootstrap(document.getElementById('topRating'), ['topRatingAnime'])
+
+                                    </script>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -205,7 +214,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 
 
