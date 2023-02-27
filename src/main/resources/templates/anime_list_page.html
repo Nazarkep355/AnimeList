@@ -63,8 +63,9 @@
                                     <!-- Additional required wrapper -->
                                     <div class="swiper-wrapper">
                                         <div th:each="anime : ${firstPageList}" class="swiper-slide">
-                                            <div style="z-index: 1;margin-left: 40px"><a th:href="'/anime/'+${anime.title}"
-                                                                               style="color: darkblue;text-decoration:none;font-size: 13px;
+                                            <div style="z-index: 1;margin-left: 40px"><a
+                                                    th:href="'/anime/'+${anime.title}"
+                                                    style="color: darkblue;text-decoration:none;font-size: 13px;
                                                                 min-width: 200px"><img height="250px"
                                                                                        th:src="'/images/'+${anime.poster}">
                                                 <div th:text="${anime.title}"></div>
@@ -103,18 +104,17 @@
                                 });</script>
                             </div>
                         </div>
-                        <div class="container mx-3 my-2">
+                        <div ng-app="videoPlayerTrigger" id="videoApp" class="container mx-3 my-2">
                             <h2 th:text="#{title.lastUpdates}"></h2>
-                            <div  class="tableFixHead">
+                            <div class="tableFixHead">
                                 <table class="table table-striped">
-                                    <!--                                    <thead>-->
-                                    <!--                                    </thead>-->
                                     <tbody>
                                     <tr style="width: 700px" class="container my-1" th:each="record : ${updates}">
 
-                                        <td  style="width: 20%;">
-                                            <a th:href="'/anime/'+${record.episode.anime.title}" style="text-decoration: none; color: black"
-                                               >
+                                        <td style="width: 20%;">
+                                            <a  videoclicker th:videofilename="${record.episode.fileName}"
+                                               style="cursor: pointer;  text-decoration: none; color: black"
+                                            >
                                                 <img height="80px"
                                                      th:src="'/images/'+${record.episode.anime.poster}"></a></td>
 
@@ -136,16 +136,49 @@
                                 </table>
                             </div>
                             <script>
+                                videoApp = angular.module('videoPlayerTrigger', [])
+                                videoApp.directive('videoclicker', function () {
+                                    return {
+                                        link: function (scope, element, attr) {
+                                            element.on('click', function () {
+                                                video = attr.videofilename;
+                                                player = document.getElementById('overlay')
+                                                player.style.visibility = 'visible'
+                                                document.getElementById('video').setAttribute('src', '/video/' + video)
+                                            })
+                                        }
 
-                                function showVideo(video){
-                                    viddiv= document.getElementById('vidDiv')
-                                    viddiv.style.visibility="visible"
-                                    vid = document.getElementById('video')
-                                    vid.attributes.src='/video/'+video
+                                    }
+
+                                });
+                                angular.bootstrap(document.getElementById('videoApp'), ['videoPlayerTrigger'])
+
+                                function hide() {
+                                    player = document.getElementById('overlay')
+                                    player.style.visibility = 'hidden'
+                                    document.getElementById('video').setAttribute('src', '')
                                 }
                             </script>
-                            <div id="vidDiv" style="visibility:hidden ;position: absolute;top:300px;left: 500px;">
-                                <video id="video" src=""></video>
+                            <div id="overlay" style="top:0;left:0;position: absolute;visibility:hidden;z-index: 1000">
+                                <div style="background-color: gray;
+                            opacity: 0.3;display: block;position: absolute"></div>
+                                <div id="player" style="position:absolute;top:300px;
+                                left: 450px;">
+                                    <button onclick="hide()" style="position: absolute;top:-30px;left: 600px">
+                                        <svg height="20px" width="20px" version="1.1" id="Layer_1"
+                                             xmlns="http://www.w3.org/2000/svg"
+                                             xmlns:xlink="http://www.w3.org/1999/xlink"
+                                             viewBox="0 0 512 512" xml:space="preserve">
+                                                <g>
+	                                                <g>
+	                                                            	<polygon color="red" points="512,59.076 452.922,0 256,196.922 59.076,0 0,59.076 196.922,256 0,452.922 59.076,512 256,315.076 452.922,512
+		                                	512,452.922 315.076,256 		"/>
+	                                            </g>
+                                            </g>
+                                        </svg>
+                                    </button>
+                                    <video id="video" src="" height="360px" controls preload="metadata"></video>
+                                </div>
                             </div>
                         </div>
                         <div style="min-height: 150px"></div>
@@ -199,7 +232,6 @@
                                                 $http.get('/best?quantity=5').then(function (response) {
                                                     $scope.bestAnimes = response.data;
                                                     $scope.getRates()
-                                                    console.log($scope.bestAnimes)
                                                 }, function (error) {
                                                     alert(error.message)
                                                 })
