@@ -26,6 +26,6 @@ public class AnimeSearchService {
     }
 
     public Optional<Anime> findByName(String name){
-        animeRepository.findAnimeByTitle(name);
+       return animeRepository.findAnimeByTitle(name);
     }
 }
