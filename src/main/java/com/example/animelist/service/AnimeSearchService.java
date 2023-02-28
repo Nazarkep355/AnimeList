@@ -24,4 +24,8 @@ public class AnimeSearchService {
     public Optional<SavedList> findSavedListByName(String name){
         return savedListRepository.findByName(name);
     }
+
+    public Optional<Anime> findByName(String name){
+        animeRepository.findAnimeByTitle(name);
+    }
 }
