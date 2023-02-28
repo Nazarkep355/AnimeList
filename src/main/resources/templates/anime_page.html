@@ -6,24 +6,25 @@
 </head>
 <body>
 <div th:insert="header.html:: header"></div>
-<form th:method="post" th:action="@{/login}">
-    <div>
-        <input name="username">
+
+<div style="background: black">
+    <div class="container">
+        <div class="container mx-1">
+            <div style="background: white;">
+                <div class="row">
+                    <div class="col" style="max-width: 25%;min-width:25%">
+                        <div class="container mx-1 my-1">
+                            <img height="300px" th:src="'/images/'+${anime.poster}">
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <input type="password" name="password">
-    </div>
-    <div>
-        <button type="submit">
-            submit
-        </button>
-    </div>
-</form>
-<div style="max-height: 40px"></div>
-<form th:method="post" th:action="@{/logout}">
-    <button>
-        logout
-    </button>
-</form>
+</div>
+
+
 </body>
 </html>
