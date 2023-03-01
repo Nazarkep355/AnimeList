@@ -85,12 +85,12 @@
                                     </form>
                                 </div>
                                 <div class="col my-3">
-<!--                                    <form th:action="@{/user/a}" method="post">-->
-<!--                                        <input type="hidden" name="anime_id" th:value="${anime.id}">-->
-<!--                                        <button type="button" style="width: 250px" th:text="#{title.rateAnime}"-->
-<!--                                                class="btn btn-primary">Primary-->
-<!--                                        </button>-->
-<!--                                    </form>-->
+                                    <form action="/user/score" method="post">
+                                        <input type="hidden" name="anime_id" th:value="${anime.id}">
+                                        <button type="button" style="width: 250px" th:text="#{title.rateAnime}"
+                                                class="btn btn-primary">Primary
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
