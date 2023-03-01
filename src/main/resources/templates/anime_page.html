@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>ANIME</title>
+    <style>
+        .dark-text {
+            color: #444;
+            font-weight: 700;
+        }
+    </style>
 </head>
 <body>
 <div th:insert="header.html:: header"></div>
@@ -12,13 +18,44 @@
         <div class="container mx-1">
             <div style="background: white;">
                 <div class="row">
-                    <div class="col" style="max-width: 25%;min-width:25%">
-                        <div class="container mx-1 my-1">
-                            <img height="300px" th:src="'/images/'+${anime.poster}">
+                    <div class="col container my-1" style="margin-left: 15px;border: #e5e5e5 solid 1px;
+                     max-width: 20%;min-width:20%">
+                        <div class="my-2 ms-2">
+                            <img height="300px" style="border-radius: 10px" th:src="'/images/'+${anime.poster}"/>
                         </div>
-
-
+                        <div>
+                            <div>
+                                <strong class="dark-text"
+                                        th:text="#{title.episodes}+': '"
+                                ></strong>
+                                <span th:text="${anime.episodesNumber}"></span>
+                            </div>
+                            <div>
+                                <strong class="dark-text"
+                                        th:text="#{title.genre}+': '"
+                                ></strong>
+                                <span th:if="${!#locale.getLanguage().equals('uk')}"
+                                      th:each="i : ${#numbers.sequence(0,anime.genres.size()-1)}">
+                                    <span th:if="${i==anime.genres.size()-1}"
+                                          th:text="' '+${anime.genres.get(i).enName}">
+                                    </span>
+                                        <span th:if="${i!=anime.genres.size()-1}"
+                                              th:text="' '+${anime.genres.get(i).enName}+','">
+                                        </span>
+                                </span>
+                                <span th:if="${#locale.getLanguage().equals('uk')}"
+                                      th:each="i : ${#numbers.sequence(0,anime.genres.size()-1)}">
+                                    <span th:if="${i==anime.genres.size()-1}"
+                                          th:text="' '+${anime.genres.get(i).ukName}">
+                                    </span>
+                                        <span th:if="${i!=anime.genres.size()-1}"
+                                              th:text="' '+${anime.genres.get(i).ukName}+','">
+                                </span>
+                                        </span>
+                            </div>
+                        </div>
                     </div>
+                    <div class="col" style="min-height: 896px"></div>
                 </div>
             </div>
         </div>
