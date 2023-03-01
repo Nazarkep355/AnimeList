@@ -42,6 +42,7 @@
                                         <span th:if="${i!=anime.genres.size()-1}"
                                               th:text="' '+${anime.genres.get(i).enName}+','">
                                         </span>
+
                                 </span>
                                 <span th:if="${#locale.getLanguage().equals('uk')}"
                                       th:each="i : ${#numbers.sequence(0,anime.genres.size()-1)}">
