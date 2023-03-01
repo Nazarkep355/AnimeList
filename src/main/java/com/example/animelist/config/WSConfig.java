@@ -29,12 +29,12 @@ public class WSConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests()
-                .requestMatchers("/admin/*")
+                .requestMatchers("/admin/**")
                 .hasAuthority("ADMIN")
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/user/*")
-                .authenticated()
+                .requestMatchers("/user/**")
+                .hasAnyAuthority("USER","ADMIN")
                 .and()
                 .authorizeHttpRequests()
                 .anyRequest()

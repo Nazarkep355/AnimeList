@@ -77,9 +77,9 @@
                                     </div>
                                 </div>
                                 <div class="col my-3">
-                                    <form action="/user/addToWatchList" method="post">
+                                    <form id="addForm" action="/user/addToWatchList" method="post">
                                         <input type="hidden" ng-model="anime_id" th:value="${anime.id}">
-                                        <button type="button" th:text="#{title.addToList}" style="width: 250px"
+                                        <button type="submit" th:text="#{title.addToList}" style="width: 250px"
                                                 class="btn btn-primary">Primary
                                         </button>
                                     </form>
@@ -102,6 +102,30 @@
     </div>
 </div>
 <script>
+    addform = document.getElementById('addForm')
+    addform.onsubmit = event => {
+        event.preventDefault();
+        // Create the form object
+        let uploadFormDate = new FormData(addform);
+        // Initiate the AJAX request
+        let request = new XMLHttpRequest();
+        request.setRequestHeader('JSESSIONID',)//FIND HEADER TO INSERT
+        // Ensure the request method is POST
+        request.open('POST', addform.action);
+        // Attach the progress event handler to the AJAX request
+
+        // The following code will execute when the request is complete
+        request.onreadystatechange = () => {
+            if (request.readyState == 4 && request.status == 200) {
+                // Output the response message
+                uploadForm.querySelector('.result').innerHTML = request.responseText;
+            }
+        };
+        // Execute request
+        request.send(uploadFormDate);
+
+    }
+
     animePage = angular.module('animePageApp',[])
     animePage.controller('scoreCtrl', function ($scope, $http) {
         $scope.rating = ''

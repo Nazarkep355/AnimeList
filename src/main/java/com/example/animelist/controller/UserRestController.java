@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserRestController {
     @PostMapping("/addToWatchList")
     public ResponseEntity<Anime> addAnimeToUserList(Long anime_id, String user) {
+        System.out.println("here");
+        System.out.println(user);
         return ResponseEntity.ok(null);
     }
 }
