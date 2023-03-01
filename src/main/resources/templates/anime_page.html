@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ANIME</title>
+    <title th:text="${anime.title}"></title>
     <style>
         .dark-text {
             color: #444;
@@ -13,15 +13,16 @@
 <body>
 <div th:insert="header.html:: header"></div>
 
-<div style="background: black">
+<div ng-app="animePageApp" id="animePage" style="background: black">
     <div class="container">
         <div class="container mx-1">
             <div style="background: white;">
-                <div class="row">
+                <div class="row" ng-controller="scoreCtrl">
                     <div class="col container my-1" style="margin-left: 15px;border: #e5e5e5 solid 1px;
                      max-width: 20%;min-width:20%">
                         <div class="my-2 ms-2">
-                            <img height="300px" style="border-radius: 10px" th:src="'/images/'+${anime.poster}"/>
+                            <img height="300px" style="border-radius: 10px"
+                                 th:src="'/images/'+${anime.poster}"/>
                         </div>
                         <div>
                             <div>
@@ -42,7 +43,6 @@
                                         <span th:if="${i!=anime.genres.size()-1}"
                                               th:text="' '+${anime.genres.get(i).enName}+','">
                                         </span>
-
                                 </span>
                                 <span th:if="${#locale.getLanguage().equals('uk')}"
                                       th:each="i : ${#numbers.sequence(0,anime.genres.size()-1)}">
@@ -56,13 +56,73 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col" style="min-height: 896px"></div>
+                    <div class="col" style="min-height: 896px">
+                        <div class="container mx-4">
+                            <div id="anime_id" hidden th:text="${anime.id}"></div>
+                            <div class="mt-4">
+                                <h1 th:text="${anime.title}"></h1>
+                            </div>
+                            <div class="container row" style="border: #e5e5e5 solid 1px;min-height: 70px;
+                        background: #f8f8f8;max-width: 700px">
+                                <div class="col container my-2" style="max-width: 100px;
+                                border-right:1px solid #e5e5e5;">
+                                    <div class="text-muted"
+                                         style="font-size: 12px;
+                                text-align: center" th:text="#{title.rating}+':'">
+
+                                    </div>
+                                    <div style="font-family:Avenir,lucida grande,tahoma,verdana,arial,sans-serif;
+                            font-size: 24px;font-weight: 700;text-align: center">
+                                        {{rating | number:2}}
+                                    </div>
+                                </div>
+                                <div class="col my-3">
+                                    <form action="/user/addToWatchList" method="post">
+                                        <input type="hidden" ng-model="anime_id" th:value="${anime.id}">
+                                        <button type="button" th:text="#{title.addToList}" style="width: 250px"
+                                                class="btn btn-primary">Primary
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col my-3">
+<!--                                    <form th:action="@{/user/a}" method="post">-->
+<!--                                        <input type="hidden" name="anime_id" th:value="${anime.id}">-->
+<!--                                        <button type="button" style="width: 250px" th:text="#{title.rateAnime}"-->
+<!--                                                class="btn btn-primary">Primary-->
+<!--                                        </button>-->
+<!--                                    </form>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+<script>
+    animePage = angular.module('animePageApp',[])
+    animePage.controller('scoreCtrl', function ($scope, $http) {
+        $scope.rating = ''
+        $scope.anime_id = document.getElementById('anime_id').textContent
+        $scope.changeScore = function () {
+            $http.get('/rating/' + $scope.anime_id).then(function (response) {
+                $scope.rating = response.data
+                console.log($scope.rating)
+            }, function (error) {
+                alert(error.message)
+            })
+        }
 
+
+        $scope.changeScore()
+    });
+
+
+    angular.bootstrap(document.getElementById('animePage'), ['animePageApp'])
+
+</script>
 
 </body>
 </html>
