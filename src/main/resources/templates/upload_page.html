@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ANIME</title>
+    <style>
+        .progress {
+            height: 20px;
+            border-radius: 4px;
+            margin: 10px 0;
+            background-color: #e6e8ec;
+        }
+    </style>
+</head>
+<body>
+
+<form th:method="post" th:action="@{/login}">
+    <div>
+        <input name="username">
+    </div>
+    <div>
+        <input type="password" name="password">
+    </div>
+    <div>
+        <button type="submit">
+            submit
+        </button>
+    </div>
+</form>
+<div style="max-height: 40px"></div>
+<form th:method="post" th:action="@{/logout}">
+    <button>
+        logout
+    </button>
+</form>
+
+<form id="uploadForm" enctype="multipart/form-data" method="post" th:action="@{/upload}">
+    <input id="fileInput" type="file" name="file">
+    <div style="max-width: 300px" class="progress"></div>
+    <button type="submit">upload</button>
+</form>
+<script>
+    uploadForm = document.getElementById('uploadForm')
+    filesInput = document.getElementById('fileInput')
+    uploadForm.onsubmit = event => {
+        event.preventDefault();
+        // Make sure files are selected
+        if (filesInput.files.length<1) {
+            uploadForm.querySelector('button').innerHTML = 'Please select a file!';
+        }
+        else {
+            // Create the form object
+            let uploadFormDate = new FormData(uploadForm);
+            // Initiate the AJAX request
+            let request = new XMLHttpRequest();
+            // Ensure the request method is POST
+            request.open('POST', uploadForm.action);
+            // Attach the progress event handler to the AJAX request
+            request.upload.addEventListener('progress', event => {
+                // Add the current progress to the button
+                uploadForm.querySelector('button').innerHTML = 'Uploading... ' + '(' + ((event.loaded/event.total)*100).toFixed(2) + '%)';
+                // Update the progress bar
+                uploadForm.querySelector('.progress').style.background = 'linear-gradient(to right, #25b350, #25b350 ' + Math.round((event.loaded/event.total)*100)
+                    + '%, #e6e8ec ' + Math.round((event.loaded/event.total)*100) + '%)';
+                // Disable the submit button
+                uploadForm.querySelector('button').disabled = true;
+            });
+            // The following code will execute when the request is complete
+            request.onreadystatechange = () => {
+                if (request.readyState == 4 && request.status == 200) {
+                    // Output the response message
+                    uploadForm.querySelector('.result').innerHTML = request.responseText;
+                }
+            };
+            // Execute request
+            request.send(uploadFormDate);
+        }
+    };
+</script>
+</body>
+</html>
