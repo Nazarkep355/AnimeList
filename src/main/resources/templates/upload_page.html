@@ -34,7 +34,7 @@
     </button>
 </form>
 
-<form id="uploadForm" enctype="multipart/form-data" method="post" th:action="@{/upload}">
+<form id="uploadForm" enctype="multipart/form-data" method="post" th:action="@{/user/upload}">
     <input id="fileInput" type="file" name="file">
     <div style="max-width: 300px" class="progress"></div>
     <button type="submit">upload</button>
@@ -53,8 +53,10 @@
             let uploadFormDate = new FormData(uploadForm);
             // Initiate the AJAX request
             let request = new XMLHttpRequest();
+            // request.withCredentials = true;
             // Ensure the request method is POST
             request.open('POST', uploadForm.action);
+            // request.withCredentials = true;
             // Attach the progress event handler to the AJAX request
             request.upload.addEventListener('progress', event => {
                 // Add the current progress to the button

@@ -22,16 +22,16 @@ public class UserRestController {
 //    public Anime testMapping() {
 //        return animeSearchService.findByName("Kaguya-sama: Love is War").get();
 //    }
-    @PostMapping("/upload")
+    @PostMapping("/user/upload")
     public ResponseEntity saveFile(MultipartFile file){
         uploadFileService.saveFile(file);
         return ResponseEntity.ok().build();
     }
-    @GetMapping("/upload")
+    @GetMapping("/user/upload")
     public String uploadPage(){
         return "upload_page.html";
     }
-    @PostMapping("/addToWatchList")
+    @PostMapping("/user/addToWatchList")
     public ResponseEntity<Anime> addAnimeToUserList(Long anime_id, HttpServletRequest request) {
         System.out.println("here");
         System.out.println(request.getRemoteUser());
