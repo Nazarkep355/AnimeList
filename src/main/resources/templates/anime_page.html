@@ -78,8 +78,8 @@
                                     </div>
                                 </div>
                                 <div class="col my-3">
-                                    <form id="addForm" action="/addToWatchList" method="post">
-                                        <input type="hidden" ng-model="anime_id" th:value="${anime.id}">
+                                    <form id="addForm" th:action="@{/user/addToWatchList}" method="post">
+                                        <input type="hidden" ng-model="anime_id" name="anime_id" th:value="${anime.id}">
                                         <button type="submit" th:text="#{title.addToList}" style="width: 250px"
                                                 class="btn btn-primary">Primary
                                         </button>

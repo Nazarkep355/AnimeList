@@ -27,9 +27,6 @@ public class AnimePageController {
 
     @GetMapping("/anime/{name}")
     public String animeWatchPage(@PathVariable("name") String name, Model model, HttpServletRequest request) {
-        request.getHeaderNames().asIterator().forEachRemaining(a->{
-            System.out.println(a+":"+request.getHeader(a));
-        });
         Optional<Anime> animeOptional = aService.findByName(name);
         if (animeOptional.isEmpty()) {
             model.addAttribute("name", name);
