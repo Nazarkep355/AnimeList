@@ -59,6 +59,7 @@
                     <div class="col" style="min-height: 896px">
                         <div class="container mx-4">
                             <div id="anime_id" hidden th:text="${anime.id}"></div>
+                            <div id="sessionId" hidden th:text="${sessionId}"></div>
                             <div class="mt-4">
                                 <h1 th:text="${anime.title}"></h1>
                             </div>
@@ -77,7 +78,7 @@
                                     </div>
                                 </div>
                                 <div class="col my-3">
-                                    <form id="addForm" action="/user/addToWatchList" method="post">
+                                    <form id="addForm" action="/addToWatchList" method="post">
                                         <input type="hidden" ng-model="anime_id" th:value="${anime.id}">
                                         <button type="submit" th:text="#{title.addToList}" style="width: 250px"
                                                 class="btn btn-primary">Primary
@@ -96,7 +97,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -104,14 +104,18 @@
 <script>
     addform = document.getElementById('addForm')
     addform.onsubmit = event => {
+        sessionId=document.getElementById('sessionId').textContent
         event.preventDefault();
         // Create the form object
         let uploadFormDate = new FormData(addform);
         // Initiate the AJAX request
         let request = new XMLHttpRequest();
-        request.setRequestHeader('JSESSIONID',)//FIND HEADER TO INSERT
+        request.withCredentials=true;
         // Ensure the request method is POST
         request.open('POST', addform.action);
+        request.withCredentials=true;
+        console.log(request)
+        // request.setRequestHeader('cookie','JSESSIONID='+sessionId)
         // Attach the progress event handler to the AJAX request
 
         // The following code will execute when the request is complete

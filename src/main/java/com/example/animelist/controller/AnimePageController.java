@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -25,7 +26,10 @@ public class AnimePageController {
 
 
     @GetMapping("/anime/{name}")
-    public String animeWatchPage(@PathVariable("name") String name, Model model) {
+    public String animeWatchPage(@PathVariable("name") String name, Model model, HttpServletRequest request) {
+        request.getHeaderNames().asIterator().forEachRemaining(a->{
+            System.out.println(a+":"+request.getHeader(a));
+        });
         Optional<Anime> animeOptional = aService.findByName(name);
         if (animeOptional.isEmpty()) {
             model.addAttribute("name", name);
