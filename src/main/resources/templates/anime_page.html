@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
     <title th:text="${anime.title}"></title>
@@ -13,11 +13,11 @@
 <body>
 <div th:insert="header.html:: header"></div>
 
-<div ng-app="animePageApp" id="animePage" style="background: black">
+<div style="background: black">
     <div class="container">
         <div class="container mx-1">
             <div style="background: white;">
-                <div class="row" ng-controller="scoreCtrl">
+                <div class="row">
                     <div class="col container my-1" style="margin-left: 15px;border: #e5e5e5 solid 1px;
                      max-width: 20%;min-width:20%">
                         <div class="my-2 ms-2">
@@ -65,7 +65,8 @@
                             </div>
                             <div class="container row" style="border: #e5e5e5 solid 1px;min-height: 70px;
                         background: #f8f8f8;max-width: 700px">
-                                <div class="col container my-2" style="max-width: 100px;
+                                <div ng-app="animePageApp" id="animePage" ng-controller="scoreCtrl"
+                                     class="col container my-2" style="max-width: 100px;
                                 border-right:1px solid #e5e5e5;">
                                     <div class="text-muted"
                                          style="font-size: 12px;
@@ -78,7 +79,15 @@
                                     </div>
                                 </div>
                                 <div class="col my-3">
-                                    <form id="addForm" th:action="@{/user/addToWatchList}" method="post">
+                                    <form sec:authorize="authenticated" id="addForm" th:action="@{/user/addToWatchList}"
+                                          method="post">
+                                        <input type="hidden" ng-model="anime_id" name="anime_id" th:value="${anime.id}">
+                                        <button type="submit" th:text="#{title.addToList}" style="width: 250px"
+                                                class="btn btn-primary">Primary
+                                        </button>
+                                    </form>
+                                    <form sec:authorize="!authenticated" id="addForm"
+                                          action="user/addToWatchList" method="post">
                                         <input type="hidden" ng-model="anime_id" name="anime_id" th:value="${anime.id}">
                                         <button type="submit" th:text="#{title.addToList}" style="width: 250px"
                                                 class="btn btn-primary">Primary
@@ -104,16 +113,16 @@
 <script>
     addform = document.getElementById('addForm')
     addform.onsubmit = event => {
-        sessionId=document.getElementById('sessionId').textContent
+        sessionId = document.getElementById('sessionId').textContent
         event.preventDefault();
         // Create the form object
         let uploadFormDate = new FormData(addform);
         // Initiate the AJAX request
         let request = new XMLHttpRequest();
-        request.withCredentials=true;
+        request.withCredentials = true;
         // Ensure the request method is POST
         request.open('POST', addform.action);
-        request.withCredentials=true;
+        request.withCredentials = true;
         console.log(request)
         // request.setRequestHeader('cookie','JSESSIONID='+sessionId)
         // Attach the progress event handler to the AJAX request
@@ -130,7 +139,7 @@
 
     }
 
-    animePage = angular.module('animePageApp',[])
+    animePage = angular.module('animePageApp', [])
     animePage.controller('scoreCtrl', function ($scope, $http) {
         $scope.rating = ''
         $scope.anime_id = document.getElementById('anime_id').textContent
