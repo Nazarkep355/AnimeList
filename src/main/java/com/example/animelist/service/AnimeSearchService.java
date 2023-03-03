@@ -35,7 +35,10 @@ public class AnimeSearchService {
         return animeRepository.findAnimeByTitle(name);
     }
 
-    public List<Episode> findAnimeEpisodes(Anime anime){
+    public List<Episode> findAnimeEpisodes(Anime anime) {
         return episodeRepository.findAllByAnime(anime);
+    }
+    public Optional<Anime> findAnimeById(Long id){
+        return animeRepository.findById(id);
     }
 }

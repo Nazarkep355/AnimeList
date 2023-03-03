@@ -8,6 +8,9 @@
             color: #444;
             font-weight: 700;
         }
+        .clickable{
+           cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -79,27 +82,48 @@
                                     </div>
                                 </div>
                                 <div class="col my-3">
-                                    <form sec:authorize="authenticated" id="addForm" th:action="@{/user/addToWatchList}"
+                                    <form sec:authorize="authenticated" id="addForm"
+                                          th:action="@{/user/addToWatchList}"
                                           method="post">
-                                        <input type="hidden" ng-model="anime_id" name="anime_id" th:value="${anime.id}">
-                                        <button type="submit" th:text="#{title.addToList}" style="width: 250px"
+                                        <input type="hidden" ng-model="anime_id" name="anime_id"
+                                               th:value="${anime.id}">
+                                        <button id='addAnimeBtn' type="submit" th:text="#{title.addToList}" style="width: 250px"
                                                 class="btn btn-primary">Primary
                                         </button>
                                     </form>
+                                    <div hidden id="notLoggedTitle" th:text="#{title.haveToLogin}"></div>
+                                    <div hidden id="addedTitle" th:text="#{title.added}"></div>
+                                    <div hidden id="animeNotFoundTitle" th:text="#{title.animeNotFound}"></div>
                                     <form sec:authorize="!authenticated" id="addForm"
                                           action="user/addToWatchList" method="post">
-                                        <input type="hidden" ng-model="anime_id" name="anime_id" th:value="${anime.id}">
-                                        <button type="submit" th:text="#{title.addToList}" style="width: 250px"
+                                        <input type="hidden" ng-model="anime_id" name="anime_id"
+                                               th:value="${anime.id}">
+                                        <button  id='addAnimeBtn' type="submit" th:text="#{title.addToList}" style="width: 250px"
                                                 class="btn btn-primary">Primary
                                         </button>
                                     </form>
                                 </div>
                                 <div class="col my-3">
-                                    <form action="/user/score" method="post">
+                                    <form sec:authorize="!authenticated" id="scoreForm"
+                                          action="/user/rateAnime">
                                         <input type="hidden" name="anime_id" th:value="${anime.id}">
-                                        <button type="button" style="width: 250px" th:text="#{title.rateAnime}"
-                                                class="btn btn-primary">Primary
-                                        </button>
+
+                                        <div class="dropdown">
+                                            <button  class="btn btn-primary dropdown-toggle mx-1"
+                                                     th:text="#{title.rateAnime}" type="button" id="dropdownMenuButton1"
+                                                     data-bs-toggle="dropdown" aria-expanded="false">
+
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <li><span class="dropdown-item clickable">Українська</span></li>
+          <!--!!!!!!!!!!!!!! FINISH IT!-->      <li><span class="dropdown-item clickable">English</span></li>
+                                                <!--                    <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+                                            </ul>
+                                        </div>
+
+<!--                                        <button type="button" style="width: 250px" th:text="#{title.rateAnime}"-->
+<!--                                                class="btn btn-primary">Primary-->
+<!--                                        </button>-->
                                     </form>
                                 </div>
                             </div>
@@ -119,20 +143,25 @@
         let uploadFormDate = new FormData(addform);
         // Initiate the AJAX request
         let request = new XMLHttpRequest();
-        request.withCredentials = true;
-        // Ensure the request method is POST
         request.open('POST', addform.action);
-        request.withCredentials = true;
         console.log(request)
         // request.setRequestHeader('cookie','JSESSIONID='+sessionId)
         // Attach the progress event handler to the AJAX request
 
         // The following code will execute when the request is complete
         request.onreadystatechange = () => {
+            addButton= document.getElementById('addAnimeBtn')
             if (request.readyState == 4 && request.status == 200) {
-                // Output the response message
-                uploadForm.querySelector('.result').innerHTML = request.responseText;
+               addButton.textContent=document.getElementById('addedTitle').textContent
+
             }
+            if(request.readyState == 4 && request.status == 403){
+               addButton.textContent=document.getElementById('notLoggedTitle').textContent
+            }
+            if(request.readyState == 4 && request.status == 404){
+                addButton.textContent=document.getElementById('animeNotFoundTitle').textContent
+            }
+            addButton.setAttribute('disabled','disabled')
         };
         // Execute request
         request.send(uploadFormDate);
