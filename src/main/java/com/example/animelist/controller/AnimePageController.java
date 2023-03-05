@@ -25,11 +25,11 @@ public class AnimePageController {
     String title = "title.animeNotFound";
 
 
-    @GetMapping("/anime/{name}")
-    public String animeWatchPage(@PathVariable("name") String name, Model model, HttpServletRequest request) {
-        Optional<Anime> animeOptional = aService.findByName(name);
+    @GetMapping("/anime/{id}")
+    public String animeWatchPage(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
+        Optional<Anime> animeOptional = aService.findAnimeById(id);
         if (animeOptional.isEmpty()) {
-            model.addAttribute("name", name);
+            model.addAttribute("id", id);
             model.addAttribute("title", title);
             return "error_page.html";
         }

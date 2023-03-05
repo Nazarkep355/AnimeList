@@ -8,8 +8,9 @@
             color: #444;
             font-weight: 700;
         }
-        .clickable{
-           cursor: pointer;
+
+        .clickable {
+            cursor: pointer;
         }
     </style>
 </head>
@@ -66,9 +67,9 @@
                             <div class="mt-4">
                                 <h1 th:text="${anime.title}"></h1>
                             </div>
-                            <div class="container row" style="border: #e5e5e5 solid 1px;min-height: 70px;
+                            <div ng-app="animePageApp" id="animePage" ng-controller="scoreCtrl" class="container row" style="border: #e5e5e5 solid 1px;min-height: 70px;
                         background: #f8f8f8;max-width: 700px">
-                                <div ng-app="animePageApp" id="animePage" ng-controller="scoreCtrl"
+                                <div
                                      class="col container my-2" style="max-width: 100px;
                                 border-right:1px solid #e5e5e5;">
                                     <div class="text-muted"
@@ -87,10 +88,12 @@
                                           method="post">
                                         <input type="hidden" ng-model="anime_id" name="anime_id"
                                                th:value="${anime.id}">
-                                        <button id='addAnimeBtn' type="submit" th:text="#{title.addToList}" style="width: 250px"
+                                        <button id='addAnimeBtn' type="submit" th:text="#{title.addToList}"
+                                                style="width: 250px"
                                                 class="btn btn-primary">Primary
                                         </button>
                                     </form>
+                                    <div hidden id="ratedTitle" th:text="#{title.rated}"></div>
                                     <div hidden id="notLoggedTitle" th:text="#{title.haveToLogin}"></div>
                                     <div hidden id="addedTitle" th:text="#{title.added}"></div>
                                     <div hidden id="animeNotFoundTitle" th:text="#{title.animeNotFound}"></div>
@@ -98,33 +101,95 @@
                                           action="user/addToWatchList" method="post">
                                         <input type="hidden" ng-model="anime_id" name="anime_id"
                                                th:value="${anime.id}">
-                                        <button  id='addAnimeBtn' type="submit" th:text="#{title.addToList}" style="width: 250px"
+                                        <button id='addAnimeBtn' type="submit" th:text="#{title.addToList}"
+                                                style="width: 250px"
                                                 class="btn btn-primary">Primary
                                         </button>
                                     </form>
                                 </div>
                                 <div class="col my-3">
-                                    <form sec:authorize="!authenticated" id="scoreForm"
-                                          action="/user/rateAnime">
-                                        <input type="hidden" name="anime_id" th:value="${anime.id}">
 
-                                        <div class="dropdown">
-                                            <button  class="btn btn-primary dropdown-toggle mx-1"
-                                                     th:text="#{title.rateAnime}" type="button" id="dropdownMenuButton1"
-                                                     data-bs-toggle="dropdown" aria-expanded="false">
+                                        <form sec:authorize="authenticated" id="scoreForm"
+                                              th:action="@{/user/rateAnime}"
+                                              method="post">
+                                            <input type="hidden" name="anime_id"
+                                                   th:value="${anime.id}">
+                                            <input type="hidden" id='scorevalue' name="score" value="1">
+
+                                        </form>
+                                        <form sec:authorize="!authenticated" id="scoreForm"
+                                              action="/user/rateAnime"
+                                              method="post">
+                                            <input type="hidden" name="anime_id"
+                                                   th:value="${anime.id}">
+                                            <input type="hidden" id='scorevalue' name="score" value="1">
+
+                                        </form>
+                                        <div  id="scoreDDElement" class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle mx-1"
+                                                    th:text="#{title.rateAnime}" type="button" id="dropdownMenuButton2"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
 
                                             </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                                <li><span class="dropdown-item clickable">Українська</span></li>
-          <!--!!!!!!!!!!!!!! FINISH IT!-->      <li><span class="dropdown-item clickable">English</span></li>
+                                            <ul  class="btn btn-primary dropdown-menu"
+                                                aria-labelledby="dropdownMenuButton1">
+
+                                                <li><span score-option style="background: white" score="1"
+                                                          class="dropdown-item clickable">1</span></li>
+                                                <!--!!!!!!!!!!!!!! FINISH IT!-->
+                                                <li><span score-option style="background: white" score="2"
+                                                          class="dropdown-item clickable">2</span></li>
+                                                <li><span score-option style="background: white" score="3"
+                                                          class="dropdown-item clickable">3</span></li>
+                                                <li><span score-option style="background: white" score="4"
+                                                          class="dropdown-item clickable">4</span></li>
+                                                <li><span score-option style="background: white" score="5"
+                                                          class="dropdown-item clickable">5</span></li>
+                                                <script>
+
+
+
+                                                    scoreForm = document.getElementById('scoreForm')
+                                                    sendScoreRequest = function (score) {
+                                                        document.getElementById('scorevalue').setAttribute('value', score);
+                                                        let uploadFormDate = new FormData(scoreForm);
+                                                        // Initiate the AJAX request
+                                                        let request = new XMLHttpRequest();
+                                                        request.open('POST', scoreForm.action);
+                                                        // request.setRequestHeader('cookie','JSESSIONID='+sessionId)
+                                                        // Attach the progress event handler to the AJAX request
+
+                                                        // The following code will execute when the request is complete
+                                                        request.onreadystatechange = () => {
+                                                            rateButton = document.getElementById('dropdownMenuButton2')
+                                                            if (request.readyState == 4 && request.status == 200) {
+                                                                rateButton.textContent = document.getElementById('ratedTitle').textContent
+
+                                                            }
+                                                            if (request.readyState == 4 && request.status == 403) {
+                                                                rateButton.textContent = document.getElementById('notLoggedTitle').textContent
+                                                            }
+                                                            if (request.readyState == 4 && request.status == 404) {
+                                                                rateButton.textContent = document.getElementById('animeNotFoundTitle').textContent
+                                                            }
+                                                            rateButton.setAttribute('disabled', 'disabled')
+                                                        };
+                                                        // Execute request
+                                                        request.send(uploadFormDate);
+
+                                                    }
+
+                                                    angular.bootstrap(document.getElementById('scoreDDElement'), ['scoreDD'])
+
+                                                </script>
                                                 <!--                    <li><a class="dropdown-item" href="#">Something else here</a></li>-->
                                             </ul>
                                         </div>
 
-<!--                                        <button type="button" style="width: 250px" th:text="#{title.rateAnime}"-->
-<!--                                                class="btn btn-primary">Primary-->
-<!--                                        </button>-->
-                                    </form>
+                                        <!--                                        <button type="button" style="width: 250px" th:text="#{title.rateAnime}"-->
+                                        <!--                                                class="btn btn-primary">Primary-->
+                                        <!--                                        </button>-->
+
                                 </div>
                             </div>
                         </div>
@@ -144,24 +209,23 @@
         // Initiate the AJAX request
         let request = new XMLHttpRequest();
         request.open('POST', addform.action);
-        console.log(request)
         // request.setRequestHeader('cookie','JSESSIONID='+sessionId)
         // Attach the progress event handler to the AJAX request
 
         // The following code will execute when the request is complete
         request.onreadystatechange = () => {
-            addButton= document.getElementById('addAnimeBtn')
+            addButton = document.getElementById('addAnimeBtn')
             if (request.readyState == 4 && request.status == 200) {
-               addButton.textContent=document.getElementById('addedTitle').textContent
+                addButton.textContent = document.getElementById('addedTitle').textContent
 
             }
-            if(request.readyState == 4 && request.status == 403){
-               addButton.textContent=document.getElementById('notLoggedTitle').textContent
+            if (request.readyState == 4 && request.status == 403) {
+                addButton.textContent = document.getElementById('notLoggedTitle').textContent
             }
-            if(request.readyState == 4 && request.status == 404){
-                addButton.textContent=document.getElementById('animeNotFoundTitle').textContent
+            if (request.readyState == 4 && request.status == 404) {
+                addButton.textContent = document.getElementById('animeNotFoundTitle').textContent
             }
-            addButton.setAttribute('disabled','disabled')
+            addButton.setAttribute('disabled', 'disabled')
         };
         // Execute request
         request.send(uploadFormDate);
@@ -175,7 +239,7 @@
         $scope.changeScore = function () {
             $http.get('/rating/' + $scope.anime_id).then(function (response) {
                 $scope.rating = response.data
-                console.log($scope.rating)
+
             }, function (error) {
                 alert(error.message)
             })
@@ -184,7 +248,16 @@
 
         $scope.changeScore()
     });
-
+    animePage.directive('scoreOption', function () {
+            return {
+                link: function (scope, element, attr) {
+                    element.on('click', () =>{ sendScoreRequest(attr.score);
+                        scope.changeScore();
+                    })
+                }
+            }
+        }
+    )
 
     angular.bootstrap(document.getElementById('animePage'), ['animePageApp'])
 

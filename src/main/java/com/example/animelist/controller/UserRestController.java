@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/user")
 public class UserRestController {
     @Autowired
     private AnimeSearchService animeSearchService;
@@ -19,7 +20,7 @@ public class UserRestController {
     private UserRateService userRateService;
 
 
-    @PostMapping("/user/addToWatchList")
+    @PostMapping("/addToWatchList")
     public ResponseEntity<Anime> addAnimeToUserList(Long anime_id, HttpServletRequest request) {
         Optional<Anime> animeOptional = animeSearchService.findAnimeById(anime_id);
         if(animeOptional.isEmpty()){
@@ -28,5 +29,14 @@ public class UserRestController {
         String email = request.getRemoteUser();
         userRateService.addToWatchList(email,animeOptional.get());
         return ResponseEntity.ok(null);
+    }
+    @PostMapping("/rateAnime")
+    public ResponseEntity setAnimeRate(Long anime_id,HttpServletRequest request,int score){
+        if(anime_id>10){
+            return ResponseEntity.notFound().build();
+        }
+        System.out.println("id: " +anime_id);
+        System.out.println("score: "+score);
+        return ResponseEntity.ok().build();
     }
 }

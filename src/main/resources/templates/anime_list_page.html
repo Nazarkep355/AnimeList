@@ -64,7 +64,7 @@
                                     <div class="swiper-wrapper">
                                         <div th:each="anime : ${firstPageList}" class="swiper-slide">
                                             <div style="z-index: 1;margin-left: 40px"><a
-                                                    th:href="'/anime/'+${anime.title}"
+                                                    th:href="'/anime/'+${anime.id}"
                                                     style="color: darkblue;text-decoration:none;font-size: 13px;
                                                                 min-width: 200px"><img height="250px"
                                                                                        th:src="'/images/'+${anime.poster}">
@@ -121,13 +121,13 @@
 
                                         <td style="width: 50%">
                                             <a style="text-decoration: none;color: black "
-                                               th:href="'/anime/'+${record.episode.anime.title}"
+                                               th:href="'/anime/'+${record.episode.anime.id}"
                                                th:text="${record.episode.anime.title}">
                                             </a>
                                         </td>
                                         <td style="width: 30%">
                                             <a style="text-decoration: none;color:black;"
-                                               th:href="'/anime/'+${record.episode.anime.title}"
+                                               th:href="'/anime/'+${record.episode.anime.id}"
                                                th:text="${record.episode.episodeNum}+' '+#{title.episode}">
                                             </a>
                                         </td>
@@ -203,12 +203,12 @@
                                                 <div style="max-height: 120px;min-height: 120px"
                                                      class="row container my-1">
                                                     <div class="col" style="max-width: 82px">
-                                                        <a href="/anime/{{anime.title}}"> <img height="110px"
+                                                        <a href="/anime/{{anime.id}}"> <img height="110px"
                                                                                                width="75px"
                                                                                                src="/images/{{anime.poster}}"/>
                                                         </a></div>
                                                     <div class="col" style="margin-left: 0px">
-                                                        <div><a href="/anime/{{anime.title}}"
+                                                        <div><a href="/anime/{{anime.id}}"
                                                                 style="color: darkblue;text-decoration:none;font-size: 13px;
                                                                 min-width: 200px">{{anime.title}}</a>
                                                         </div>
