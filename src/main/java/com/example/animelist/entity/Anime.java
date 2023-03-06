@@ -23,6 +23,7 @@ public class Anime {
     private Long id;
 
     private String title;
+    @Column(columnDefinition="varchar(1000)")
     private String description;
     private int episodesNumber;
 
