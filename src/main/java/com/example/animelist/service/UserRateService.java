@@ -50,6 +50,19 @@ public class UserRateService {
         userRepository.save(user);
         return anime;
     }
-
+    public Anime rateAnime(String email,Anime anime, int score){
+        score = setCorrectValue(score);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("not found"));
+        user.getRates().put(anime,score);
+        userRepository.save(user);
+        return anime;
+    }
+    private int setCorrectValue(int score){
+        if(score>5)
+            return 5;
+        if(score<1)
+            return 1;
+        else return score;
+    }
 
 }

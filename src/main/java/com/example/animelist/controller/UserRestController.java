@@ -23,20 +23,21 @@ public class UserRestController {
     @PostMapping("/addToWatchList")
     public ResponseEntity<Anime> addAnimeToUserList(Long anime_id, HttpServletRequest request) {
         Optional<Anime> animeOptional = animeSearchService.findAnimeById(anime_id);
-        if(animeOptional.isEmpty()){
+        if (animeOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         String email = request.getRemoteUser();
-        userRateService.addToWatchList(email,animeOptional.get());
+        userRateService.addToWatchList(email, animeOptional.get());
         return ResponseEntity.ok(null);
     }
+
     @PostMapping("/rateAnime")
-    public ResponseEntity setAnimeRate(Long anime_id,HttpServletRequest request,int score){
-        if(anime_id>10){
+    public ResponseEntity setAnimeRate(Long anime_id, HttpServletRequest request, int score) {
+        Optional<Anime> animeOptional = animeSearchService.findAnimeById(anime_id);
+        if (animeOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        System.out.println("id: " +anime_id);
-        System.out.println("score: "+score);
+        userRateService.rateAnime(request.getRemoteUser(), animeOptional.get(), score);
         return ResponseEntity.ok().build();
     }
 }
