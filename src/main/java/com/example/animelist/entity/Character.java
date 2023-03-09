@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table
@@ -17,10 +19,12 @@ public class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "anime")
-    private Anime anime;
+    @ManyToMany
+    private List<Anime> anime;
     private String name;
+    @Column
+    @JoinColumn(name="image")
+    private String image;
     @ManyToOne
     @JoinColumn(name = "seiyuu")
     private Seiyuu seiyuu;

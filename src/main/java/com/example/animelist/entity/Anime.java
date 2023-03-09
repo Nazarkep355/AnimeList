@@ -29,7 +29,7 @@ public class Anime {
 
     @ManyToMany
     private List<Genre> genres;
-    @OneToMany(mappedBy = "anime")
+    @ManyToMany(mappedBy = "anime")
     private List<Character> characters;
     private String poster;
     @ElementCollection
