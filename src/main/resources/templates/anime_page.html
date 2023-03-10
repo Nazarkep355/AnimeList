@@ -197,97 +197,156 @@
                         </button>
                         <div class="collapse mx-2 my-3" id="collapseExample">
                             <div class="card card-body ">
-                                <tbody >
                                 <div class="row" th:each="character : ${anime.characters}">
-                                        <div class="col" style="max-width: 50px">
-                                            <a th:href="'/character/'+${character.id}">
-                                                <img th:alt="${character.name}" width="42" height="62"
-                                                     th:src="'/images/'+${character.image}"
-                                                >
-                                            </a>
-                                        </div>
-                                        <div class="col" style="text-align: left;font-size: 25px">
-                                            <a style="text-decoration: none;color: black" th:href="'/character/'+${character.id}"><h3
-                                                     th:text="${character.name}">Ackerman, Mikasa</h3></a>
-                                        </div>
-
-
-                                    <div class="col" style="text-align: right" >
-                                        <a  th:href="'/seiyuu/'+${character.seiyuu.id}" style="text-decoration: none;text-align: right" th:text="${character.seiyuu.name}"></a>
+                                    <div class="col" style="max-width: 50px">
+                                        <a th:href="'/character/'+${character.id}">
+                                            <img th:alt="${character.name}" width="42" height="62"
+                                                 th:src="'/images/'+${character.image}"
+                                            >
+                                        </a>
                                     </div>
-                                </tbody>
+                                    <div class="col" style="text-align: left;font-size: 25px">
+                                        <a style="text-decoration: none;color: black"
+                                           th:href="'/character/'+${character.id}"><h3
+                                                th:text="${character.name}">Ackerman, Mikasa</h3></a>
+                                    </div>
+
+
+                                    <div class="col" style="text-align: right">
+                                        <a th:href="'/seiyuu/'+${character.seiyuu.id}"
+                                           style="text-decoration: none;text-align: right"
+                                           th:text="${character.seiyuu.name}"></a>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                        <div ng-app="VPApp" id="videoApp" style="margin-top: 50px;margin-bottom: 100px;">
+                            <div class="container mx-auto">
+                                <video id="video" src="" height="480px" width="853px" controls
+                                       preload="metadata"></video>
+                            </div>
+                            <div  style="background: #444444;height: 80px;width: 853px" class="swiper container mx-4"     >
+                                <div class="swiper-wrapper">
+                                    <div th:videofilename="${episode.fileName}" style="height: 50px;
+                                    max-width: 30px;border:solid lightblue 2px; border-radius: 5px;
+                                    align-self: start; padding-left: 15px;
+                                    text-align: left;font-size: 25px;color: white;
+                                    cursor: pointer" th:each="episode : ${episodes}"
+                                         class="swiper-slide container mx-auto my-auto" th:text="${episode.episodeNum}">
+
+                                    </div>
+
+                                </div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+                            </div>
+                            <script> const swiper = new Swiper('.swiper', {
+                                direction: 'horizontal',
+                                loop: false,
+                                mousewheel: true,
+                                coverflowEffect: {
+                                    rotate: 0
+                                },
+                                slidesPerView: 5,
+                                spaceBetween: 10,
+                                initialSlide: 0,
+                                // If we need pagination
+                                pagination: {
+                                    el: '.swiper-pagination',
+                                },
+
+                                // Navigation arrows
+                                navigation: {
+                                    nextEl: '.swiper-button-next',
+                                    prevEl: '.swiper-button-prev',
+                                },
+
+                            });
+                            vpapp = angular.module('VPApp',[])
+                            vpapp.directive('videofilename',function (){
+                                return {
+                                    link: function (scope, element, attr) {
+                                        element.on('click', function () {
+                                            video = attr.videofilename
+                                            document.getElementById('video')
+                                                .setAttribute('src', '/video/' + video)
+                                        })
+                                    }
+
+                                }
+                            })
+                            angular.bootstrap(document.getElementById('videoApp'), ['VPApp'])
+                            </script>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-    addform = document.getElementById('addForm')
-    addform.onsubmit = event => {
-        sessionId = document.getElementById('sessionId').textContent
-        event.preventDefault();
-        // Create the form object
-        let uploadFormDate = new FormData(addform);
-        // Initiate the AJAX request
-        let request = new XMLHttpRequest();
-        request.open('POST', addform.action);
-        // request.setRequestHeader('cookie','JSESSIONID='+sessionId)
-        // Attach the progress event handler to the AJAX request
+    <script>
+        addform = document.getElementById('addForm')
+        addform.onsubmit = event => {
+            sessionId = document.getElementById('sessionId').textContent
+            event.preventDefault();
+            // Create the form object
+            let uploadFormDate = new FormData(addform);
+            // Initiate the AJAX request
+            let request = new XMLHttpRequest();
+            request.open('POST', addform.action);
+            // request.setRequestHeader('cookie','JSESSIONID='+sessionId)
+            // Attach the progress event handler to the AJAX request
 
-        // The following code will execute when the request is complete
-        request.onreadystatechange = () => {
-            addButton = document.getElementById('addAnimeBtn')
-            if (request.readyState == 4 && request.status == 200) {
-                addButton.textContent = document.getElementById('addedTitle').textContent
+            // The following code will execute when the request is complete
+            request.onreadystatechange = () => {
+                addButton = document.getElementById('addAnimeBtn')
+                if (request.readyState == 4 && request.status == 200) {
+                    addButton.textContent = document.getElementById('addedTitle').textContent
 
-            }
-            if (request.readyState == 4 && request.status == 403) {
-                addButton.textContent = document.getElementById('notLoggedTitle').textContent
-            }
-            if (request.readyState == 4 && request.status == 404) {
-                addButton.textContent = document.getElementById('animeNotFoundTitle').textContent
-            }
-            addButton.setAttribute('disabled', 'disabled')
-        };
-        // Execute request
-        request.send(uploadFormDate);
+                }
+                if (request.readyState == 4 && request.status == 403) {
+                    addButton.textContent = document.getElementById('notLoggedTitle').textContent
+                }
+                if (request.readyState == 4 && request.status == 404) {
+                    addButton.textContent = document.getElementById('animeNotFoundTitle').textContent
+                }
+                addButton.setAttribute('disabled', 'disabled')
+            };
+            // Execute request
+            request.send(uploadFormDate);
 
-    }
-
-    animePage = angular.module('animePageApp', [])
-    animePage.controller('scoreCtrl', function ($scope, $http) {
-        $scope.rating = ''
-        $scope.anime_id = document.getElementById('anime_id').textContent
-        $scope.changeScore = function () {
-            $http.get('/rating/' + $scope.anime_id).then(function (response) {
-                $scope.rating = response.data
-
-            }, function (error) {
-                alert(error.message)
-            })
         }
 
+        animePage = angular.module('animePageApp', [])
+        animePage.controller('scoreCtrl', function ($scope, $http) {
+            $scope.rating = ''
+            $scope.anime_id = document.getElementById('anime_id').textContent
+            $scope.changeScore = function () {
+                $http.get('/rating/' + $scope.anime_id).then(function (response) {
+                    $scope.rating = response.data
 
-        $scope.changeScore()
-    });
-    animePage.directive('scoreOption', function () {
-            return {
-                link: function (scope, element, attr) {
-                    element.on('click', () => {
-                        sendScoreRequest(attr.score);
-                        scope.changeScore();
-                    })
+                }, function (error) {
+                    alert(error.message)
+                })
+            }
+
+
+            $scope.changeScore()
+        });
+        animePage.directive('scoreOption', function () {
+                return {
+                    link: function (scope, element, attr) {
+                        element.on('click', () => {
+                            sendScoreRequest(attr.score);
+                            scope.changeScore();
+                        })
+                    }
                 }
             }
-        }
-    )
+        )
 
-    angular.bootstrap(document.getElementById('animePage'), ['animePageApp'])
+        angular.bootstrap(document.getElementById('animePage'), ['animePageApp'])
 
-</script>
+    </script>
 
 </body>
 </html>
