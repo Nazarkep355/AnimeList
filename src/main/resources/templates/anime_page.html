@@ -1,29 +1,352 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
-    <title>ANIME</title>
+    <title th:text="${anime.title}"></title>
+    <style>
+        .dark-text {
+            color: #444;
+            font-weight: 700;
+        }
+
+        .clickable {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <div th:insert="header.html:: header"></div>
-<form th:method="post" th:action="@{/login}">
-    <div>
-        <input name="username">
+
+<div style="background: black">
+    <div class="container">
+        <div class="container mx-1">
+            <div style="background: white;">
+                <div class="row">
+                    <div class="col container my-1" style="margin-left: 15px;border: #e5e5e5 solid 1px;
+                     max-width: 20%;min-width:20%">
+                        <div class="my-2 ms-2">
+                            <img height="300px" style="border-radius: 10px"
+                                 th:src="'/images/'+${anime.poster}"/>
+                        </div>
+                        <div>
+                            <div>
+                                <strong class="dark-text"
+                                        th:text="#{title.episodes}+': '"
+                                ></strong>
+                                <span th:text="${anime.episodesNumber}"></span>
+                            </div>
+                            <div>
+                                <strong class="dark-text"
+                                        th:text="#{title.genre}+': '"
+                                ></strong>
+                                <span th:if="${!#locale.getLanguage().equals('uk')}"
+                                      th:each="i : ${#numbers.sequence(0,anime.genres.size()-1)}">
+                                    <span th:if="${i==anime.genres.size()-1}"
+                                          th:text="' '+${anime.genres.get(i).enName}">
+                                    </span>
+                                        <span th:if="${i!=anime.genres.size()-1}"
+                                              th:text="' '+${anime.genres.get(i).enName}+','">
+                                        </span>
+                                </span>
+                                <span th:if="${#locale.getLanguage().equals('uk')}"
+                                      th:each="i : ${#numbers.sequence(0,anime.genres.size()-1)}">
+                                    <span th:if="${i==anime.genres.size()-1}"
+                                          th:text="' '+${anime.genres.get(i).ukName}">
+                                    </span>
+                                        <span th:if="${i!=anime.genres.size()-1}"
+                                              th:text="' '+${anime.genres.get(i).ukName}+','">
+                                </span>
+                                        </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col" style="min-height: 896px">
+                        <div class="container mx-4">
+                            <div id="anime_id" hidden th:text="${anime.id}"></div>
+                            <div id="sessionId" hidden th:text="${sessionId}"></div>
+                            <div class="mt-4">
+                                <h1 th:text="${anime.title}"></h1>
+                            </div>
+                            <div ng-app="animePageApp" id="animePage" ng-controller="scoreCtrl"
+                                 class="container row" style="border: #e5e5e5 solid 1px;min-height: 70px;
+                        background: #f8f8f8;max-width: 700px">
+                                <div
+                                        class="col container my-2" style="max-width: 100px;
+                                border-right:1px solid #e5e5e5;">
+                                    <div class="text-muted"
+                                         style="font-size: 12px;
+                                text-align: center" th:text="#{title.rating}+':'">
+
+                                    </div>
+                                    <div style="font-family:Avenir,lucida grande,tahoma,verdana,arial,sans-serif;
+                            font-size: 24px;font-weight: 700;text-align: center">
+                                        {{rating | number:2}}
+                                    </div>
+                                </div>
+                                <div class="col my-3">
+                                    <form sec:authorize="authenticated" id="addForm"
+                                          th:action="@{/user/addToWatchList}"
+                                          method="post">
+                                        <input type="hidden" ng-model="anime_id" name="anime_id"
+                                               th:value="${anime.id}">
+                                        <button id='addAnimeBtn' type="submit" th:text="#{title.addToList}"
+                                                style="width: 250px"
+                                                class="btn btn-primary">Primary
+                                        </button>
+                                    </form>
+                                    <div hidden id="ratedTitle" th:text="#{title.rated}"></div>
+                                    <div hidden id="notLoggedTitle" th:text="#{title.haveToLogin}"></div>
+                                    <div hidden id="addedTitle" th:text="#{title.added}"></div>
+                                    <div hidden id="animeNotFoundTitle" th:text="#{title.animeNotFound}"></div>
+                                    <form sec:authorize="!authenticated" id="addForm"
+                                          action="user/addToWatchList" method="post">
+                                        <input type="hidden" ng-model="anime_id" name="anime_id"
+                                               th:value="${anime.id}">
+                                        <button id='addAnimeBtn' type="submit" th:text="#{title.addToList}"
+                                                style="width: 250px"
+                                                class="btn btn-primary">Primary
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col my-3">
+
+                                    <form sec:authorize="authenticated" id="scoreForm"
+                                          th:action="@{/user/rateAnime}"
+                                          method="post">
+                                        <input type="hidden" name="anime_id"
+                                               th:value="${anime.id}">
+                                        <input type="hidden" id='scorevalue' name="score" value="1">
+
+                                    </form>
+                                    <form sec:authorize="!authenticated" id="scoreForm"
+                                          action="/user/rateAnime"
+                                          method="post">
+                                        <input type="hidden" name="anime_id"
+                                               th:value="${anime.id}">
+                                        <input type="hidden" id='scorevalue' name="score" value="1">
+
+                                    </form>
+                                    <div id="scoreDDElement" class="dropdown">
+                                        <button class="btn btn-primary dropdown-toggle mx-1"
+                                                th:text="#{title.rateAnime}" type="button" id="dropdownMenuButton2"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+
+                                        </button>
+                                        <ul class="btn btn-primary dropdown-menu"
+                                            aria-labelledby="dropdownMenuButton1">
+
+                                            <li><span score-option style="background: white" score="1"
+                                                      class="dropdown-item clickable">1</span></li>
+                                            <!--!!!!!!!!!!!!!! FINISH IT!-->
+                                            <li><span score-option style="background: white" score="2"
+                                                      class="dropdown-item clickable">2</span></li>
+                                            <li><span score-option style="background: white" score="3"
+                                                      class="dropdown-item clickable">3</span></li>
+                                            <li><span score-option style="background: white" score="4"
+                                                      class="dropdown-item clickable">4</span></li>
+                                            <li><span score-option style="background: white" score="5"
+                                                      class="dropdown-item clickable">5</span></li>
+                                            <script>
+
+
+                                                scoreForm = document.getElementById('scoreForm')
+                                                sendScoreRequest = function (score) {
+                                                    document.getElementById('scorevalue').setAttribute('value', score);
+                                                    let uploadFormDate = new FormData(scoreForm);
+                                                    // Initiate the AJAX request
+                                                    let request = new XMLHttpRequest();
+                                                    request.open('POST', scoreForm.action);
+                                                    // request.setRequestHeader('cookie','JSESSIONID='+sessionId)
+                                                    // Attach the progress event handler to the AJAX request
+
+                                                    // The following code will execute when the request is complete
+                                                    request.onreadystatechange = () => {
+                                                        rateButton = document.getElementById('dropdownMenuButton2')
+                                                        if (request.readyState == 4 && request.status == 200) {
+                                                            rateButton.textContent = document.getElementById('ratedTitle').textContent
+
+                                                        }
+                                                        if (request.readyState == 4 && request.status == 403) {
+                                                            rateButton.textContent = document.getElementById('notLoggedTitle').textContent
+                                                        }
+                                                        if (request.readyState == 4 && request.status == 404) {
+                                                            rateButton.textContent = document.getElementById('animeNotFoundTitle').textContent
+                                                        }
+                                                        rateButton.setAttribute('disabled', 'disabled')
+                                                    };
+                                                    // Execute request
+                                                    request.send(uploadFormDate);
+
+                                                }
+
+                                                angular.bootstrap(document.getElementById('scoreDDElement'), ['scoreDD'])
+
+                                            </script>
+                                        </ul>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container mx-2" th:text="${anime.description}"></div>
+                        <button class="btn btn-primary" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                                aria-expanded="false" aria-controls="collapseExample"
+                                th:text="#{title.characters}">
+                        </button>
+                        <div class="collapse mx-2 my-3" id="collapseExample">
+                            <div class="card card-body ">
+                                <div class="row" th:each="character : ${anime.characters}">
+                                    <div class="col" style="max-width: 50px">
+                                        <a th:href="'/character/'+${character.id}">
+                                            <img th:alt="${character.name}" width="42" height="62"
+                                                 th:src="'/images/'+${character.image}"
+                                            >
+                                        </a>
+                                    </div>
+                                    <div class="col" style="text-align: left;font-size: 25px">
+                                        <a style="text-decoration: none;color: black"
+                                           th:href="'/character/'+${character.id}"><h3
+                                                th:text="${character.name}">Ackerman, Mikasa</h3></a>
+                                    </div>
+
+
+                                    <div class="col" style="text-align: right">
+                                        <a th:href="'/seiyuu/'+${character.seiyuu.id}"
+                                           style="text-decoration: none;text-align: right"
+                                           th:text="${character.seiyuu.name}"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-app="VPApp" id="videoApp" style="margin-top: 50px;margin-bottom: 100px;">
+                            <div class="container mx-auto">
+                                <video id="video" src="" height="480px" width="853px" controls
+                                       preload="metadata"></video>
+                            </div>
+                            <div  style="background: #444444;height: 80px;width: 853px" class="swiper container mx-4"     >
+                                <div class="swiper-wrapper">
+                                    <div th:videofilename="${episode.fileName}" style="height: 50px;
+                                    max-width: 30px;border:solid lightblue 2px; border-radius: 5px;
+                                    align-self: start; padding-left: 15px;
+                                    text-align: left;font-size: 25px;color: white;
+                                    cursor: pointer" th:each="episode : ${episodes}"
+                                         class="swiper-slide container mx-auto my-auto" th:text="${episode.episodeNum}">
+
+                                    </div>
+
+                                </div>
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+                            </div>
+                            <script> const swiper = new Swiper('.swiper', {
+                                direction: 'horizontal',
+                                loop: false,
+                                mousewheel: true,
+                                coverflowEffect: {
+                                    rotate: 0
+                                },
+                                slidesPerView: 5,
+                                spaceBetween: 10,
+                                initialSlide: 0,
+                                // If we need pagination
+                                pagination: {
+                                    el: '.swiper-pagination',
+                                },
+
+                                // Navigation arrows
+                                navigation: {
+                                    nextEl: '.swiper-button-next',
+                                    prevEl: '.swiper-button-prev',
+                                },
+
+                            });
+                            vpapp = angular.module('VPApp',[])
+                            vpapp.directive('videofilename',function (){
+                                return {
+                                    link: function (scope, element, attr) {
+                                        element.on('click', function () {
+                                            video = attr.videofilename
+                                            document.getElementById('video')
+                                                .setAttribute('src', '/video/' + video)
+                                        })
+                                    }
+
+                                }
+                            })
+                            angular.bootstrap(document.getElementById('videoApp'), ['VPApp'])
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <input type="password" name="password">
-    </div>
-    <div>
-        <button type="submit">
-            submit
-        </button>
-    </div>
-</form>
-<div style="max-height: 40px"></div>
-<form th:method="post" th:action="@{/logout}">
-    <button>
-        logout
-    </button>
-</form>
+    <script>
+        addform = document.getElementById('addForm')
+        addform.onsubmit = event => {
+            sessionId = document.getElementById('sessionId').textContent
+            event.preventDefault();
+            // Create the form object
+            let uploadFormDate = new FormData(addform);
+            // Initiate the AJAX request
+            let request = new XMLHttpRequest();
+            request.open('POST', addform.action);
+            // request.setRequestHeader('cookie','JSESSIONID='+sessionId)
+            // Attach the progress event handler to the AJAX request
+
+            // The following code will execute when the request is complete
+            request.onreadystatechange = () => {
+                addButton = document.getElementById('addAnimeBtn')
+                if (request.readyState == 4 && request.status == 200) {
+                    addButton.textContent = document.getElementById('addedTitle').textContent
+
+                }
+                if (request.readyState == 4 && request.status == 403) {
+                    addButton.textContent = document.getElementById('notLoggedTitle').textContent
+                }
+                if (request.readyState == 4 && request.status == 404) {
+                    addButton.textContent = document.getElementById('animeNotFoundTitle').textContent
+                }
+                addButton.setAttribute('disabled', 'disabled')
+            };
+            // Execute request
+            request.send(uploadFormDate);
+
+        }
+
+        animePage = angular.module('animePageApp', [])
+        animePage.controller('scoreCtrl', function ($scope, $http) {
+            $scope.rating = ''
+            $scope.anime_id = document.getElementById('anime_id').textContent
+            $scope.changeScore = function () {
+                $http.get('/rating/' + $scope.anime_id).then(function (response) {
+                    $scope.rating = response.data
+
+                }, function (error) {
+                    alert(error.message)
+                })
+            }
+
+
+            $scope.changeScore()
+        });
+        animePage.directive('scoreOption', function () {
+                return {
+                    link: function (scope, element, attr) {
+                        element.on('click', () => {
+                            sendScoreRequest(attr.score);
+                            scope.changeScore();
+                        })
+                    }
+                }
+            }
+        )
+
+        angular.bootstrap(document.getElementById('animePage'), ['animePageApp'])
+
+    </script>
+
 </body>
 </html>

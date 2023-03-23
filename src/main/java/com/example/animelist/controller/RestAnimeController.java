@@ -25,12 +25,15 @@ public class RestAnimeController {
 
     @GetMapping("/search/{name}")
     public Page<Anime> getAnimeByName(@PathVariable("name") String name, Pageable pageable) {
-        return animeSearchService.findAnimeByName(name, pageable);
+        Page<Anime> page =animeSearchService.findAnimeByName(name, pageable);
+        page.getContent().forEach(anime->anime.setCharacters(null));
+        return page;
     }
 
     @GetMapping(value = "/best")
     public List<Anime> getBestByRating(int quantity) {
         List<Anime> anime = userRateService.topRating(quantity);
+        anime.forEach(a->a.setCharacters(null));
         return anime;
     }
 

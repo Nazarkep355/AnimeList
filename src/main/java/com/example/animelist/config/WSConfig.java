@@ -27,14 +27,15 @@ public class WSConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests()
-                .requestMatchers("/admin/*")
-                .hasAuthority("ADMIN")
+        http    .cors()
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/user/*")
-                .authenticated()
+                .hasAnyAuthority("USER","ADMIN")
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers("/admin/**")
+                .hasAuthority("ADMIN")
                 .and()
                 .authorizeHttpRequests()
                 .anyRequest()

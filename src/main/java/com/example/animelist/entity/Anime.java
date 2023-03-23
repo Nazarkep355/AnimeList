@@ -23,12 +23,13 @@ public class Anime {
     private Long id;
 
     private String title;
+    @Column(columnDefinition="varchar(1000)")
     private String description;
     private int episodesNumber;
 
     @ManyToMany
     private List<Genre> genres;
-    @OneToMany(mappedBy = "anime")
+    @ManyToMany(mappedBy = "anime")
     private List<Character> characters;
     private String poster;
     @ElementCollection

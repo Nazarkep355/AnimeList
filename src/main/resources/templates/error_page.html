@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{${title}}">Title</title>
+</head>
+<body>
+<header th:insert="header.html :: header"/>
+<div style="background: black">
+    <div class="container">
+        <div class="container mx-1">
+            <div style="background: white;min-height: 896px">
+                <div style="min-height: 50px"></div>
+                <div th:if='${title.equals("title.animeNotFound")}' style="text-align: center;">
+                    <h2 th:text="#{${title}}"></h2>
+                    <div><span style="font-size: large"
+                               th:text="#{title.id}+': '"></span>
+                        <i style="font-size: large" th:text="${id}"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

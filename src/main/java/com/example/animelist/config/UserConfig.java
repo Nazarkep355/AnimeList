@@ -22,7 +22,8 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 public class UserConfig {
     @Autowired
     private UserRepository userRepository;
-    @Autowired PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> userRepository.findByEmail(username)
