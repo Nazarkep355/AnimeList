@@ -49,10 +49,10 @@
                              ng-repeat="anime in animes"
                         >
                             <div style="z-index:10000;max-height: 140px;max-width: 100px" class="col">
-                              <a href="/anime/{{anime.title}}"><img height="140px" src="/images/{{anime.poster}}"></a>
+                              <a href="/anime/{{anime.id}}"><img height="140px" src="/images/{{anime.poster}}"></a>
                             </div>
                             <div  class="col">
-                             <a href="/anime/{{anime.title}}" style="z-index:10000;text-decoration: none; color: black">{{anime.title}}</a>
+                             <a href="/anime/{{anime.id}}" style="z-index:10000;text-decoration: none; color: black">{{anime.title}}</a>
                             </div>
 
                         </div>

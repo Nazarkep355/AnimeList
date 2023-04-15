@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class RecordService {
@@ -21,5 +22,10 @@ public class RecordService {
         return recordRepository.findAll(pageable);
 
     }
+    public Long getLastRecordIdIncremented(){
+        Optional<Record> recordOptional = recordRepository.findLast();
+        return recordOptional.map(record -> record.getId() + 1).orElse(1l);
+    }
+
 
 }
