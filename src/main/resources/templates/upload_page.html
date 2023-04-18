@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="#{title.uploadPage}"></title>
+    <style>
+        .progress {
+            height: 20px;
+            border-radius: 4px;
+            margin: 10px 0;
+            background-color: #e6e8ec;
+        }
+    </style>
 </head>
 <body>
 <div th:insert="header.html::header"></div>
@@ -14,23 +22,33 @@
                 <div class="container mx-3">
                     <div class="container " ng-app="uploadFormApp" id="uploadApp">
                         <div class="mx-auto mb-3" style="max-width: 450px;align-self: center">
-                            <form ng-controller="formCtrl">
-                                <input ng-model="field" ng-change="search()" type="text" class="form-control mb-3"
+                            <form id="uploadForm" th:action="@{/admin/upload}"
+                                  method="post" ng-controller="formCtrl">
+                                <input name="anime" ng-model="name_field" ng-change="search()" id="field-name" type="text"
+                                       class="form-control "
                                        th:placeholder="#{title.animeTitle}"
                                        aria-describedby="basic-addon2">
-                                <div style="z-index:10000;margin-left: 0px;position:absolute;max-width:350px;
-                            max-height: 600px;background: white;border: black 1px">
-                                    <div style="z-index:10000;margin-left: 3px;margin-top:3px;min-height: 160px; max-height:160px; min-width: 350px;
-                          color:black"
-                                         ng-repeat="anime in animes"
-                                    >{{anime.title}}
+                                <div id="name_options" style="z-index:10000;margin-left: 0px;position:absolute;max-width:350px;
+                            max-height: 90px;background: white;">
+                                    <div name-option style="z-index:10000;margin-left: 3px;margin-top:3px;min-height: 30px;
+                                     max-height:30px; min-width: 350px;border:solid black 1px;
+                          color:black;cursor: pointer;"
+                                         ng-repeat="anime in animes" >{{anime.title}}
                                     </div>
                                 </div>
-                                {{field}}
-                                <div class="form-floating mb-3">
+                                <div class="form-floating mt-3">
                                     <input type="number" class="form-control" value="1" id="floatingInput"
-                                           placeholder="name@example.com">
+                                      name="episode_num"     placeholder="name@example.com" min="1" max="{{anime.episodesNumber}}">
                                     <label for="floatingInput" th:text="#{title.episode}"></label>
+                                </div>
+                                <div class="input-group mb-3 mt-3">
+                                    <input type="file" name="file" class="form-control" id="fileInput">
+                                </div>
+                                <div style="max-width: 300px" class="progress"></div>
+                                <div class=" container mx-auto" style="text-align: center">
+                                    <button type="submit" name="file" style="align-self: center"
+                                            class="btn btn-primary btn-lg">Large button
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -39,12 +57,13 @@
 
                             upFormApp.controller('formCtrl', function ($scope, $http) {
                                 $scope.search = function () {
-                                    if ($scope.field.length > 2) {
-                                        $http.get("/search/" + $scope.field + "?size=3")
+                                    if ($scope.name_field.length > 2) {
+                                        $http.get("/search/" + $scope.name_field + "?size=3")
                                             .then
                                             (function (response) {
                                                 $scope.animes = response.data.content;
-                                                console.log($scope.animes)
+                                                document.getElementById('name_options').style.visibility = 'visible'
+
                                             }, function (error) {
                                                 alert(error.message)
                                             });
@@ -52,8 +71,23 @@
                                         $scope.animes = []
                                     }
                                 }
+                            })
 
 
+                            upFormApp.directive('nameOption', function () {
+                                return {
+                                    scope: true,
+                                    link: function (scope, element, attr) {
+                                        element.on('click', function () {
+                                            console.log(scope.animes)
+                                            document.getElementById('field-name').value = element.text()
+                                            scope.anime = scope.animes
+                                                .filter((a) => a.title.trim() === element.text().trim())
+                                                .pop()
+                                            document.getElementById('name_options').style.visibility='hidden'
+                                        })
+                                    }
+                                }
                             })
 
 

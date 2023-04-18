@@ -2,6 +2,7 @@ package com.example.animelist.controller;
 
 import com.example.animelist.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,8 @@ public class AdminController {
         return "upload_page.html";
     }
     @PostMapping("/upload")
-    public String uploadEpisode(String anime, int episode_num, MultipartFile file){
-        return null;
+    public ResponseEntity uploadEpisode(String anime, int episode_num, MultipartFile file){
+        recordService.uploadEpisode(anime,episode_num,file);
+        return ResponseEntity.ok(null);
     }
 }
